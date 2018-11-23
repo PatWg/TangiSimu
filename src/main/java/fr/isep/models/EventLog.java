@@ -1,16 +1,12 @@
 package fr.isep.models;
 
-import java.util.List;
 
 public abstract class EventLog {
     public static final String BLOCKLOG_ID = "blocklogid";
 
-
     protected String type;
     protected String blockId;
     protected String group;
-    protected String xml;
-    protected List<String> ids;
     protected String userID;
     protected String currentExerciseID;
     protected String time;
@@ -37,22 +33,6 @@ public abstract class EventLog {
 
     public void setGroup(String group) {
         this.group = group;
-    }
-
-    public String getXml() {
-        return xml;
-    }
-
-    public void setXml(String xml) {
-        this.xml = xml;
-    }
-
-    public List<String> getIds() {
-        return ids;
-    }
-
-    public void setIds(List<String> ids) {
-        this.ids = ids;
     }
 
     public String getUserID() {
