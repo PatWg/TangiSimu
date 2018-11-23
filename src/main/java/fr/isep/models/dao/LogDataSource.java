@@ -1,8 +1,10 @@
 package fr.isep.models.dao;
 
 import fr.isep.database.DatabaseConnection;
+import fr.isep.models.CombineBlockLog;
 import fr.isep.models.CreateBlockLog;
 import fr.isep.models.EventLog;
+import fr.isep.models.MoveBlockLog;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 
 public class LogDataSource implements LogDao {
     private static final int INSERT_SUCCESS = 1;
+    private static final int SELECT_ERROR = 0;
     private Connection connection;
 
     public LogDataSource() {
@@ -24,7 +27,24 @@ public class LogDataSource implements LogDao {
             int eventId = getEventId(eventLog);
             addCreateBlockLog(eventId, eventLog);
         }
+    }
 
+    @Override
+    public void insertMoveBlockLog(EventLog eventLog) throws SQLException {
+        int status = insertEventWorkspaceLog(eventLog);
+        if (status == INSERT_SUCCESS) {
+            int eventId = getEventId(eventLog);
+            addMoveBlockLog(eventId, eventLog);
+        }
+    }
+
+    @Override
+    public void insertCombineBlockLog(EventLog eventLog) throws SQLException {
+        int status = insertEventWorkspaceLog(eventLog);
+        if (status == INSERT_SUCCESS) {
+            int eventId = getEventId(eventLog);
+            addCombineBlockLog(eventId, eventLog);
+        }
     }
 
     private int insertEventWorkspaceLog(EventLog eventLog) throws SQLException {
@@ -46,7 +66,8 @@ public class LogDataSource implements LogDao {
     }
 
     private int getEventId(EventLog eventLog) throws SQLException {
-        String selectStatement = "SELECT blocklogid FROM eventworkspace WHERE userid = ? AND exerciseid = ? and blocklyid = ? and logtype = ?";
+        String selectStatement = "SELECT blocklogid FROM eventworkspace WHERE userid = ? AND exerciseid = ? and blocklyid = ? and logtype = ? " +
+                "ORDER BY blocklogid DESC LIMIT 1";
         int userid = Integer.parseInt(eventLog.getUserID());
         int exerciseid = getExerciseId(eventLog);
         PreparedStatement statement = connection.prepareStatement(selectStatement);
@@ -58,15 +79,35 @@ public class LogDataSource implements LogDao {
         if (rs.next()) {
             return rs.getInt(EventLog.BLOCKLOG_ID);
         }
-        throw new SQLException("Could not find the latest eventworkspace item inserted");
+        return SELECT_ERROR;
     }
 
     private void addCreateBlockLog(int eventId, EventLog eventLog) throws SQLException {
         String insertStatement = "INSERT INTO blockcreate (createid, xml) VALUES (?, ?)";
-        String xml = eventLog.getXml();
+        String xml = ((CreateBlockLog) eventLog).getXml();
         PreparedStatement statement = connection.prepareStatement(insertStatement);
         statement.setInt(1, eventId);
-        statement.setString(2, eventLog.getXml());
+        statement.setString(2, xml);
+        statement.executeUpdate();
+    }
+
+    private void addMoveBlockLog(int eventId, EventLog eventLog) throws SQLException {
+        String insertStatement = "INSERT INTO blockmove VALUES (?, ?)";
+        String newCoordinate = ((MoveBlockLog) eventLog).getNewCoordinate();
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, eventId);
+        statement.setString(2, newCoordinate);
+        statement.executeUpdate();
+    }
+
+    private void addCombineBlockLog(int eventId, EventLog eventLog) throws SQLException {
+        String insertStatement = "INSERT INTO blockcombine VALUES (?, ?)";
+        String parentId = ((CombineBlockLog) eventLog).getNewParentId();
+        String inputName = ((CombineBlockLog) eventLog).getNewInputName();
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, eventId);
+        statement.setString(2, parentId);
+        statement.setString(3, inputName);
         statement.executeUpdate();
     }
 

@@ -243,6 +243,7 @@
     var currentEx = 1;
 
     // TODO: Ask about the use of this file
+    // TODO: File is in the server and should be loaded with the JSP
     // var hexFileHeader;
 
     workspace.addChangeListener(mirrorEvent);
@@ -279,11 +280,11 @@
                 loadXmlToWorkspace(xhttp.responseText);
             }
         };
-        var url = "http://localhost:3000/pageChange/?currentExerciseID="+ obj[obj.selectedIndex].value;
+        var url = "${pageContext.request.contextPath}/pageChange/?currentExerciseID="+ obj[obj.selectedIndex].value;
         xhttp.open("GET",url, true);
         xhttp.send();
         console.log(json.workspacexml);
-        postrequest("http://localhost:3000/currentExercise",json);
+        postrequest("${pageContext.request.contextPath}/currentExercise",json);
     }
 
     var mousePosition = {};
@@ -306,7 +307,7 @@
             mousePosition.userID = ${user.userid} ;
             mousePosition.currentExerciseID = exerciselist[exerciselist.selectedIndex].value;
             //console.log(mousePosition);
-            postrequest("http://localhost:3000/mousePosition",mousePosition);
+            postrequest("${pageContext.request.contextPath}/mousePosition",mousePosition);
         }
         setTimeout(sendMousePos,100);
     }
@@ -321,7 +322,7 @@
         switch(primaryEvent.type){
             // ui event : category, click and select
             case "ui":
-                url = "http://localhost:3000/categoryEvent";
+                url = "${pageContext.request.contextPath}/categoryEvent";
                 json.group = (json.group || null);
                 json.type += json.element;
                 json.newValue = ((json.newValue || json.blockId) || null );
@@ -336,34 +337,34 @@
             // move event : when a block is moved
             // combine event : when a block has a new parent
             case "move":
-                url = "http://localhost:3000/moveBlock";
+                url = "${pageContext.request.contextPath}/moveBlock";
                 if (primaryEvent.newParentId != null){
                     json.type = "combine";
                     json.newInputName = (json.newInputName || null);
-                    url = "http://localhost:3000/combineBlock";
+                    url = "${pageContext.request.contextPath}/combineBlock";
                     console.log(url);
                 }
                 break;
             // change event : when a block is changed
             case "change":
-                url = "http://localhost:3000/changeBlock";
+                url = "${pageContext.request.contextPath}/changeBlock";
                 break;
             // delete event : when a block is deleted
             case "delete":
-                url = "http://localhost:3000/deleteBlock";
+                url = "${pageContext.request.contextPath}/deleteBlock";
                 break;
             // when a new variable is created
             case "var_create":
-                url = "http://localhost:3000/varEvent";
+                url = "${pageContext.request.contextPath}/varEvent";
                 json.group = null;
                 break;
             // when a variable is removed
             case "var_delete":
-                url = "http://localhost:3000/varEvent";
+                url = "${pageContext.request.contextPath}/varEvent";
                 break;
             // when a variable is renamed
             case "var_rename":
-                url = "http://localhost:3000/varEvent";
+                url = "${pageContext.request.contextPath}/varEvent";
                 json.varName = json.newName;
                 console.log("var_rename");
                 break;
@@ -398,7 +399,7 @@
         var data = hexFileHeader.substr(0,hexFileHeader.length-31) + pythonToHex() + hexFileHeader.substr(-31);
         download(data);
         function download(data){
-            const blob = new Blob([data],{type:'application/octer-stream'});
+            const blob = new Blob([data],{type:'application/octet-stream'});
             const url = window.URL.createObjectURL(blob);
             const a= document.createElement('a');
             a.setAttribute('hidden','');
