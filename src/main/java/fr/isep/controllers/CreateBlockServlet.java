@@ -2,10 +2,7 @@ package fr.isep.controllers;
 
 import com.google.gson.Gson;
 import fr.isep.helpers.URIHelper;
-import fr.isep.models.CombineBlockLog;
-import fr.isep.models.CreateBlockLog;
-import fr.isep.models.EventLog;
-import fr.isep.models.MoveBlockLog;
+import fr.isep.models.*;
 import fr.isep.models.dao.LogDataSource;
 
 import javax.servlet.RequestDispatcher;
@@ -84,8 +81,15 @@ public class CreateBlockServlet extends HttpServlet {
         }
     }
 
-    private void changeBlock(HttpServletRequest request, HttpServletResponse response) {
-
+    private void changeBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson gson = new Gson();
+        EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), ChangeBlockLog.class);
+        try {
+            logDataSource.insertChangeBlockLog(log);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while inserting a changeBlock log.");
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteBlock(HttpServletRequest request, HttpServletResponse response) {

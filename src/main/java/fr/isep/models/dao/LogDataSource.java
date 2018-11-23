@@ -1,10 +1,7 @@
 package fr.isep.models.dao;
 
 import fr.isep.database.DatabaseConnection;
-import fr.isep.models.CombineBlockLog;
-import fr.isep.models.CreateBlockLog;
-import fr.isep.models.EventLog;
-import fr.isep.models.MoveBlockLog;
+import fr.isep.models.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,6 +41,15 @@ public class LogDataSource implements LogDao {
         if (status == INSERT_SUCCESS) {
             int eventId = getEventId(eventLog);
             addCombineBlockLog(eventId, eventLog);
+        }
+    }
+
+    @Override
+    public void insertChangeBlockLog(EventLog eventLog) throws SQLException {
+        int status = insertEventWorkspaceLog(eventLog);
+        if (status == INSERT_SUCCESS) {
+            int eventId = getEventId(eventLog);
+            addChangeBlockLog(eventId, eventLog);
         }
     }
 
@@ -101,13 +107,24 @@ public class LogDataSource implements LogDao {
     }
 
     private void addCombineBlockLog(int eventId, EventLog eventLog) throws SQLException {
-        String insertStatement = "INSERT INTO blockcombine VALUES (?, ?)";
+        String insertStatement = "INSERT INTO blockcombine VALUES (?, ?, ?)";
         String parentId = ((CombineBlockLog) eventLog).getNewParentId();
         String inputName = ((CombineBlockLog) eventLog).getNewInputName();
         PreparedStatement statement = connection.prepareStatement(insertStatement);
         statement.setInt(1, eventId);
         statement.setString(2, parentId);
         statement.setString(3, inputName);
+        statement.executeUpdate();
+    }
+
+    private void addChangeBlockLog(int eventId, EventLog eventLog) throws SQLException {
+        String insertStatement = "INSERT INTO blockchange VALUES (?, ?, ?)";
+        String varType = ((ChangeBlockLog) eventLog).getName();
+        String var = ((ChangeBlockLog) eventLog).getNewValue();
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, eventId);
+        statement.setString(2, varType);
+        statement.setString(3, var);
         statement.executeUpdate();
     }
 
