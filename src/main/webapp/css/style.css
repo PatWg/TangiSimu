@@ -1,0 +1,44 @@
+body {
+     padding: 50px;
+     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+ }
+
+a {
+    color: #00B7FF;
+}
+
+#main {
+    width: 100vw;
+    height: 80vh;
+}
+
+#blocklyDiv {
+    width: 60%;
+    height: 100%;
+    float: left;
+}
+
+#pythonArea {
+    width: 30%;
+    height: 100%;
+    float: left;
+    margin-left: 2%;
+}
+
+a:link
+{
+    text-decoration:none;
+    color:black;
+}
+
+#login-form {
+    width: 30%;
+}
+
+.text-red {
+    color: red;
+}
+
+.margin-bottom {
+    margin-bottom: 5px;
+}
