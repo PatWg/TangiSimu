@@ -63,6 +63,11 @@ public class LogDataSource implements LogDao {
         }
     }
 
+    @Override
+    public void insertMousePositionLog(MousePositionLog log) throws SQLException {
+        addMousePositionLog(log);
+    }
+
     private int insertEventWorkspaceLog(EventLog eventLog) throws SQLException {
         // Database and JSON types are different for userid and exerciseid
         // So need to perform a few processes before executing the query
@@ -144,6 +149,19 @@ public class LogDataSource implements LogDao {
         PreparedStatement statement = connection.prepareStatement(insertStatement);
         statement.setInt(1, eventId);
         statement.setString(2, blockIds);
+        statement.executeUpdate();
+    }
+
+    private void addMousePositionLog(MousePositionLog log) throws SQLException {
+        String insertStatement = "INSERT INTO mousepos (userid, exerciseid, xposition, yposition, mptime) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        int userId = Integer.parseInt(log.getUserID());
+        int exerciseId = getExerciseId(log);
+        statement.setInt(1, userId);
+        statement.setInt(2, exerciseId);
+        statement.setString(3, log.getX());
+        statement.setString(4, log.getY());
+        statement.setString(5, log.getTime());
         statement.executeUpdate();
     }
 

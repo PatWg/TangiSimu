@@ -262,7 +262,7 @@
 
         var json = {};
         json.workspacexml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-        json.userID = ${user.userid} ;
+        json.userID = document.getElementById("userId").innerHTML;
         json.currentExerciseID = currentEx;
         currentEx =  exerciselist[exerciselist.selectedIndex].value;
         json.time =new Date().toISOString().slice(0, 19).replace('T',' ');
@@ -304,10 +304,11 @@
             previousPosition.x = mousePosition.x;
             previousPosition.y = mousePosition.y;
 
-            mousePosition.userID = ${user.userid} ;
-            mousePosition.currentExerciseID = exerciselist[exerciselist.selectedIndex].value;
+            mousePosition.userID = document.getElementById("userId").innerHTML;
+            var e = document.getElementById("exerciselist");
+            mousePosition.currentExerciseID = e.options[e.selectedIndex].value;
             //console.log(mousePosition);
-            postrequest("${pageContext.request.contextPath}/mousePosition",mousePosition);
+            postrequest("${pageContext.request.contextPath}/mousePosition", mousePosition);
         }
         setTimeout(sendMousePos,100);
     }

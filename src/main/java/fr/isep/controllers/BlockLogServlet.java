@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "CreateBlockServlet", urlPatterns = {URIHelper.CREATE_BLOCK, URIHelper.MOVE_BLOCK,
+@WebServlet(name = "BlockLogServlet", urlPatterns = {URIHelper.CREATE_BLOCK, URIHelper.MOVE_BLOCK,
 URIHelper.COMBINE_BLOCK, URIHelper.CHANGE_BLOCK, URIHelper.DELETE_BLOCK})
-public class CreateBlockServlet extends HttpServlet {
+public class BlockLogServlet extends HttpServlet {
     private LogDataSource logDataSource = new LogDataSource();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
