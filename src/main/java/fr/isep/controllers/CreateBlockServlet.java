@@ -92,7 +92,14 @@ public class CreateBlockServlet extends HttpServlet {
         }
     }
 
-    private void deleteBlock(HttpServletRequest request, HttpServletResponse response) {
-
+    private void deleteBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Gson gson = new Gson();
+        EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), DeleteBlockLog.class);
+        try {
+            logDataSource.insertDeleteBlockLog(log);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while inserting a deleteBlock log.");
+            System.out.println(e.getMessage());
+        }
     }
 }

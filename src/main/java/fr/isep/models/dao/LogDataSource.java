@@ -2,6 +2,7 @@ package fr.isep.models.dao;
 
 import fr.isep.database.DatabaseConnection;
 import fr.isep.models.*;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +51,15 @@ public class LogDataSource implements LogDao {
         if (status == INSERT_SUCCESS) {
             int eventId = getEventId(eventLog);
             addChangeBlockLog(eventId, eventLog);
+        }
+    }
+
+    @Override
+    public void insertDeleteBlockLog(EventLog eventLog) throws SQLException {
+        int status = insertEventWorkspaceLog(eventLog);
+        if (status == INSERT_SUCCESS) {
+            int eventId = getEventId(eventLog);
+            addDeleteBlockLog(eventId, eventLog);
         }
     }
 
@@ -128,6 +138,14 @@ public class LogDataSource implements LogDao {
         statement.executeUpdate();
     }
 
+    private void addDeleteBlockLog(int eventId, EventLog eventLog) throws SQLException {
+        String insertStatement = "INSERT INTO blockdelete VALUES (?, ?)";
+        String blockIds = ((DeleteBlockLog) eventLog).getIdsAsString();
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, eventId);
+        statement.setString(2, blockIds);
+        statement.executeUpdate();
+    }
 
     private int getExerciseId(EventLog eventLog) {
         String exerciseId = eventLog.getCurrentExerciseID().trim();
