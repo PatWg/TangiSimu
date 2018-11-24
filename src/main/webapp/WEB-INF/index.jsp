@@ -284,6 +284,7 @@
         xhttp.open("GET",url, true);
         xhttp.send();
         console.log(json.workspacexml);
+        // Save the state of the previous exercise (before switching exercise)
         postrequest("${pageContext.request.contextPath}/currentExercise",json);
     }
 
