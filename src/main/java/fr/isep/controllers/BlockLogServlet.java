@@ -1,6 +1,7 @@
 package fr.isep.controllers;
 
 import com.google.gson.Gson;
+import com.sun.deploy.net.HttpResponse;
 import fr.isep.helpers.URIHelper;
 import fr.isep.models.*;
 import fr.isep.models.dao.LogDataSource;
@@ -16,26 +17,30 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "BlockLogServlet", urlPatterns = {URIHelper.CREATE_BLOCK, URIHelper.MOVE_BLOCK,
-URIHelper.COMBINE_BLOCK, URIHelper.CHANGE_BLOCK, URIHelper.DELETE_BLOCK})
+                                                    URIHelper.COMBINE_BLOCK, URIHelper.CHANGE_BLOCK,
+                                                    URIHelper.DELETE_BLOCK, URIHelper.CATEGORY_EVENT})
 public class BlockLogServlet extends HttpServlet {
     private LogDataSource logDataSource = new LogDataSource();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getRequestURI()) {
             case URIHelper.BASE_URI + URIHelper.CREATE_BLOCK:
-            createBlock(request, response);
+            createBlock(request);
             break;
             case URIHelper.BASE_URI + URIHelper.MOVE_BLOCK:
-                moveBlock(request, response);
+                moveBlock(request);
                 break;
             case URIHelper.BASE_URI + URIHelper.COMBINE_BLOCK:
-                combineBlock(request, response);
+                combineBlock(request);
                 break;
             case URIHelper.BASE_URI + URIHelper.CHANGE_BLOCK:
-                changeBlock(request, response);
+                changeBlock(request);
                 break;
             case URIHelper.BASE_URI + URIHelper.DELETE_BLOCK:
-                deleteBlock(request, response);
+                deleteBlock(request);
+                break;
+            case URIHelper.BASE_URI + URIHelper.CATEGORY_EVENT:
+                categoryEventLog(request);
                 break;
             default:
                 throw new ServletException("An error occurred while processing your request.");
@@ -48,7 +53,7 @@ public class BlockLogServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void createBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createBlock(HttpServletRequest request) throws IOException {
         Gson gson = new Gson();
         EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CreateBlockLog.class);
         try {
@@ -59,7 +64,7 @@ public class BlockLogServlet extends HttpServlet {
         }
     }
 
-    private void moveBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void moveBlock(HttpServletRequest request) throws IOException {
         Gson gson = new Gson();
         EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), MoveBlockLog.class);
         try {
@@ -70,7 +75,7 @@ public class BlockLogServlet extends HttpServlet {
         }
     }
 
-    private void combineBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void combineBlock(HttpServletRequest request) throws IOException {
         Gson gson = new Gson();
         EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CombineBlockLog.class);
         try {
@@ -81,7 +86,7 @@ public class BlockLogServlet extends HttpServlet {
         }
     }
 
-    private void changeBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void changeBlock(HttpServletRequest request) throws IOException {
         Gson gson = new Gson();
         EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), ChangeBlockLog.class);
         try {
@@ -92,13 +97,24 @@ public class BlockLogServlet extends HttpServlet {
         }
     }
 
-    private void deleteBlock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void deleteBlock(HttpServletRequest request) throws IOException {
         Gson gson = new Gson();
         EventLog log = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), DeleteBlockLog.class);
         try {
             logDataSource.insertDeleteBlockLog(log);
         } catch (SQLException e) {
             System.out.println("An error occurred while inserting a deleteBlock log.");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void categoryEventLog(HttpServletRequest request) throws IOException {
+        Gson gson = new Gson();
+        EventLog eventLog = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CategoryEventLog.class);
+        try {
+            logDataSource.insertCategoryEventLog(eventLog);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while inserting a categoryEvent log.");
             System.out.println(e.getMessage());
         }
     }
