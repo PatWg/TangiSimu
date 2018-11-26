@@ -2,7 +2,6 @@ package fr.isep.models.dao;
 
 import fr.isep.database.DatabaseConnection;
 import fr.isep.models.*;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +64,7 @@ public class LogDataSource implements LogDao {
 
     @Override
     public void insertCategoryEventLog(EventLog eventLog) throws SQLException {
-        insertEventWorkspaceLog(eventLog);
+        insertCategoryEventWorkspaceLog(eventLog);
     }
 
     @Override
@@ -85,6 +84,26 @@ public class LogDataSource implements LogDao {
         }
     }
 
+    @Override
+    public String getInitialWorkspaceState(User user) throws SQLException {
+        return selectInitialWorkspaceState(user);
+    }
+
+    @Override
+    public String changeExercise(ExerciseLog exerciseLog) throws SQLException {
+        saveCurrentExercise(exerciseLog);
+        int saveWorkspace = saveWorkspaceState(exerciseLog);
+        if (saveWorkspace == INSERT_SUCCESS) {
+            return getWorkspaceState(exerciseLog);
+        }
+        return "";
+    }
+
+    @Override
+    public void runExercise(ExerciseLog exerciseLog) throws SQLException {
+
+    }
+
     private int insertEventWorkspaceLog(EventLog eventLog) throws SQLException {
         // Database and JSON types are different for userid and exerciseid
         // So need to perform a few processes before executing the query
@@ -98,6 +117,22 @@ public class LogDataSource implements LogDao {
         statement.setInt(2, exerciseid);
         statement.setString(3, eventLog.getGroup());
         statement.setString(4, eventLog.getBlockId());
+        statement.setString(5, eventLog.getType());
+        statement.setString(6, eventLog.getTime());
+        return statement.executeUpdate();
+    }
+
+    private int insertCategoryEventWorkspaceLog(EventLog eventLog) throws SQLException {
+        String insertStatement = "INSERT INTO eventworkspace (userid, exerciseid, groupid, blocklyid, logtype, logtime) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+        int userid = Integer.parseInt(eventLog.getUserID());
+        int exerciseid = getExerciseId(eventLog);
+
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, userid);
+        statement.setInt(2, exerciseid);
+        statement.setString(3, eventLog.getGroup());
+        statement.setString(4, ((CategoryEventLog) eventLog).getNewValue());
         statement.setString(5, eventLog.getType());
         statement.setString(6, eventLog.getTime());
         return statement.executeUpdate();
@@ -190,9 +225,51 @@ public class LogDataSource implements LogDao {
         statement.executeUpdate();
     }
 
+    private String selectInitialWorkspaceState(User user) throws SQLException {
+        String selectStatement = "SELECT blockid, xml FROM workspacexml WHERE userid = ? AND exerciseid = 1 " +
+                "ORDER BY blockid DESC LIMIT 1";
+        PreparedStatement statement = connection.prepareStatement(selectStatement);
+        statement.setInt(1, user.getUserid());
+        ResultSet rs = statement.executeQuery();
+        return rs.next() ? rs.getString(ExerciseLog.WORKSPACE_XML) : "";
+    }
+
+    private void saveCurrentExercise(ExerciseLog exerciseLog) throws SQLException {
+        String insertStatement = "INSERT INTO currentex (userid, exerciseid, cptime) VALUES (?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, Integer.parseInt(exerciseLog.getUserID()));
+        statement.setInt(2, exerciseLog.getCurrentExerciseID());
+        statement.setString(3, exerciseLog.getTime());
+        statement.executeUpdate();
+    }
+
+    private int saveWorkspaceState(ExerciseLog exerciseLog) throws SQLException {
+        String insertStatement = "INSERT INTO workspacexml (userid, exerciseid, action, xml, blocktime) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, Integer.parseInt(exerciseLog.getUserID()));
+        statement.setInt(2, exerciseLog.getCurrentExerciseID());
+        statement.setString(3, exerciseLog.getAction());
+        statement.setString(4, exerciseLog.getWorkspacexml());
+        statement.setString(5, exerciseLog.getTime());
+        return statement.executeUpdate();
+    }
+
+    private String getWorkspaceState(ExerciseLog exerciseLog) throws SQLException {
+        String selectStatement = "SELECT blockid, xml FROM workspacexml WHERE userid = ? AND exerciseid = ? " +
+                "ORDER BY blockid DESC LIMIT 1";
+        PreparedStatement statement = connection.prepareStatement(selectStatement);
+        statement.setInt(1, Integer.parseInt(exerciseLog.getUserID()));
+        statement.setInt(2, Integer.parseInt(exerciseLog.getNewExerciseID()));
+        ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+            return rs.getString(ExerciseLog.WORKSPACE_XML);
+        }
+        return "";
+    }
+
     private int getExerciseId(EventLog eventLog) {
         String exerciseId = eventLog.getCurrentExerciseID().trim();
-        exerciseId = exerciseId.split(" ")[1];
         return Integer.parseInt(exerciseId);
     }
 }
