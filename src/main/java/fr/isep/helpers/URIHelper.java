@@ -9,6 +9,7 @@ public class URIHelper {
     public static final String COMBINE_BLOCK = "/combineBlock";
     public static final String CHANGE_BLOCK = "/changeBlock";
     public static final String DELETE_BLOCK = "/deleteBlock";
+    public static final String CATEGORY_EVENT = "/categoryEvent";
     public static final String MOUSE_LOG = "/mousePosition";
     public static final String VARIABLOE_LOG = "/varEvent";
 }

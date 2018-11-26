@@ -64,12 +64,19 @@ public class LogDataSource implements LogDao {
     }
 
     @Override
+    public void insertCategoryEventLog(EventLog eventLog) throws SQLException {
+        insertEventWorkspaceLog(eventLog);
+    }
+
+    @Override
     public void insertMousePositionLog(MousePositionLog log) throws SQLException {
         addMousePositionLog(log);
     }
 
     @Override
     public void insertVariableLog(EventLog eventLog) throws SQLException {
+        // Issue with inconsistent naming conventions led to this line here
+        // Gson was not able to parse it appropriately
         eventLog.setBlockId(((VariableLog) eventLog).getVarId());
         int status = insertEventWorkspaceLog(eventLog);
         if (status == INSERT_SUCCESS) {

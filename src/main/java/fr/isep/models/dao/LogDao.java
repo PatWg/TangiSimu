@@ -11,6 +11,7 @@ public interface LogDao {
     void insertCombineBlockLog(EventLog eventLog) throws SQLException;
     void insertChangeBlockLog(EventLog eventLog) throws SQLException;
     void insertDeleteBlockLog(EventLog eventLog) throws SQLException;
+    void insertCategoryEventLog(EventLog eventLog) throws SQLException;
     void insertMousePositionLog(MousePositionLog log) throws SQLException;
     void insertVariableLog(EventLog eventLog) throws SQLException;
 }
