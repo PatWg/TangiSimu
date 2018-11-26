@@ -34,13 +34,14 @@
 </head>
 <body>
 <div class="margin-bottom">
-    <p>Bonjour ${user.fname} ${user.lname} !</p>
-    <p>Identifiant à mémoriser : <span id="userId">${user.userid}</span></p>
+    <p>Bonjour ${user.fname} ${user.lname} !<br/>
+    Identifiant à mémoriser : <span id="userId">${user.userid}</span></p>
     <select id="exerciselist" onchange="changeExercise(this)">
-        <c:forEach items="${exercises}" var="element">
-            <option>${element.title}</option>
-        </c:forEach>
+        <%--<c:forEach items="${exercises}" var="element">--%>
+            <%--<option>${element.title}</option>--%>
+        <%--</c:forEach>--%>
     </select>
+    <p id="exerciseStatement"></p>
 </div>
 
 <div id="main" class="margin-bottom">
@@ -48,7 +49,8 @@
     <textarea id="pythonArea" disabled></textarea>
 </div>
 
-<button onclick="startDownload()"> click me</button>
+<!-- TODO: Change the following line to manage simulation and tangible object -->
+<button onclick="startDownload()">Lancer le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Logic" colour="#5C81A6">
         <block type="logic_boolean"></block>
@@ -241,16 +243,31 @@
     var blockEvent = 0; // used to prevent the logging when changing workspace from javascript
     var currentGroup = null;
     var currentEx = 1;
-
     // TODO: Ask about the use of this file
     // TODO: File is in the server and should be loaded with the JSP
     // var hexFileHeader;
 
     workspace.addChangeListener(mirrorEvent);
-    // loadXmlToWorkspace();
+    <%--var workspaceState = "\"" + ${workspace} + "\"";--%>
+    <%--loadXmlToWorkspace(workspaceState);--%>
+    var exerciseList = ${exercises};
+    loadExerciseList(exerciseList);
+
+    function loadExerciseList(exerciseList) {
+        var exerciseSelector = document.querySelector("#exerciselist");
+        for (var i = 0; i < exerciseList.length; i++) {
+            var option = document.createElement('option');
+            option.value = exerciseList[i]["exerciseid"].toString();
+            option.text = exerciseList[i]["title"];
+            exerciseSelector.appendChild(option);
+        }
+        document.querySelector("#exerciseStatement").innerHTML = exerciseList[0]["content"];
+    }
 
     // Load the workspace from xml code
     function loadXmlToWorkspace(wholexml){
+        <%--var test = new XMLSerializer().serializeToString(${workspace});--%>
+        <%--console.log(test);--%>
         if (wholexml == null)
             return;
         blockEvent +=1;
@@ -264,10 +281,12 @@
         json.workspacexml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
         json.userID = document.getElementById("userId").innerHTML;
         json.currentExerciseID = currentEx;
-        currentEx =  exerciselist[exerciselist.selectedIndex].value;
+        var e = document.getElementById("exerciselist");
+        currentEx =  e.options[e.selectedIndex].value;
         json.time =new Date().toISOString().slice(0, 19).replace('T',' ');
-        console.log(json.workspacexml);
         json.action= "exerciseChangement";
+        json.newExerciseID = obj[obj.selectedIndex].value;
+        console.log("CHANGE EXERCISE: " , json);
         blockEvent+=1;
         workspace.clear();
         console.log(exerciseList[0]);
@@ -280,12 +299,15 @@
                 loadXmlToWorkspace(xhttp.responseText);
             }
         };
-        var url = "${pageContext.request.contextPath}/pageChange/?currentExerciseID="+ obj[obj.selectedIndex].value;
-        xhttp.open("GET",url, true);
-        xhttp.send();
+        xhttp.open("POST", "${pageContext.request.contextPath}/currentExercise", json, true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(JSON.stringify(json));
+        <%--var url = "${pageContext.request.contextPath}/pageChange/?currentExerciseID="+ obj[obj.selectedIndex].value;--%>
+        // xhttp.open("GET",url, true);
+        // xhttp.send();
         console.log(json.workspacexml);
         // Save the state of the previous exercise (before switching exercise)
-        postrequest("${pageContext.request.contextPath}/currentExercise",json);
+        <%--postrequest("${pageContext.request.contextPath}/currentExercise",json);--%>
     }
 
     var mousePosition = {};
@@ -333,7 +355,6 @@
             case "create":
                 url = "${pageContext.request.contextPath}/createBlock";
                 console.log(url);
-                // TODO: Ask about next line
                 json.xml = json.xml.replace(' xmlns="http://www.w3.org/1999/xhtml"','');
                 break;
             // move event : when a block is moved

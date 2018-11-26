@@ -1,11 +1,13 @@
 package fr.isep.controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import fr.isep.helpers.FormHelper;
 import fr.isep.helpers.URIHelper;
 import fr.isep.models.Exercise;
 import fr.isep.models.User;
 import fr.isep.models.dao.ExerciseDataSource;
+import fr.isep.models.dao.LogDataSource;
 import fr.isep.models.dao.UserDataSource;
 
 import javax.servlet.RequestDispatcher;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,9 +25,12 @@ import java.util.List;
 public class HomeServlet extends HttpServlet {
     private static final String USER_ATTRIBUTE = "user";
     private static final String EXERCISES_ATTRIBUTE = "exercises";
+    private static final String EXERCISE_STATEMENT = "exerciseStatement";
+    private static final String WORKSPACE_STATE = "workspace";
 
     private UserDataSource userDataSource = new UserDataSource();
     private ExerciseDataSource exerciseDataSource = new ExerciseDataSource();
+    private LogDataSource logDataSource = new LogDataSource();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String firstName = request.getParameter(FormHelper.LoginFormHelper.FIRST_NAME);
@@ -33,9 +39,16 @@ public class HomeServlet extends HttpServlet {
         if (isValid(firstName, lastName)) {
             try {
                 User user = userDataSource.createUser(firstName, lastName, isSimulation);
-                request.setAttribute(USER_ATTRIBUTE, user);
                 List<Exercise> exercises = retrieveExercises();
-                request.setAttribute(EXERCISES_ATTRIBUTE, exercises);
+                request.setAttribute(USER_ATTRIBUTE, user);
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<Exercise>>() {}.getType();
+                String json = gson.toJson(exercises, listType);
+                request.setAttribute(EXERCISES_ATTRIBUTE, json);
+                request.setAttribute(EXERCISE_STATEMENT, exercises.get(0).getContent());
+
+//                String workspaceState = logDataSource.getInitialWorkspaceState(user);
+//                request.setAttribute(WORKSPACE_STATE, workspaceState);
                 redirectUser(request, response, user);
             } catch (NullPointerException | SQLException e) {
                 e.printStackTrace();
@@ -78,6 +91,7 @@ public class HomeServlet extends HttpServlet {
     private void redirectUser(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         if (user.isSimorobj()) {
+            // TODO: Redirect to a version with the simulation
             dispatcher = request.getRequestDispatcher("/WEB-INF/index.jsp");
         } else {
             dispatcher = request.getRequestDispatcher("/WEB-INF/index.jsp");
