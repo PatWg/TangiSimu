@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "VariableLogServlet", urlPatterns = URIHelper.VARIABLOE_LOG)
+@WebServlet(name = "VariableLogServlet", urlPatterns = URIHelper.VARIABLE_LOG)
 public class VariableLogServlet extends HttpServlet {
     private LogDataSource dataSource = new LogDataSource();
 
