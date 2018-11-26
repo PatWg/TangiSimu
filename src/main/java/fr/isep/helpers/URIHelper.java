@@ -11,5 +11,7 @@ public class URIHelper {
     public static final String DELETE_BLOCK = "/deleteBlock";
     public static final String CATEGORY_EVENT = "/categoryEvent";
     public static final String MOUSE_LOG = "/mousePosition";
-    public static final String VARIABLOE_LOG = "/varEvent";
+    public static final String VARIABLE_LOG = "/varEvent";
+    public static final String CHANGE_EXERCISE = "/currentExercise";
+    public static final String RUN_EXERCISE = "/runExercise";
 }
