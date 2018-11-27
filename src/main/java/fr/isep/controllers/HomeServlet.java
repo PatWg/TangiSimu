@@ -46,9 +46,8 @@ public class HomeServlet extends HttpServlet {
                 String json = gson.toJson(exercises, listType);
                 request.setAttribute(EXERCISES_ATTRIBUTE, json);
                 request.setAttribute(EXERCISE_STATEMENT, exercises.get(0).getContent());
-
-//                String workspaceState = logDataSource.getInitialWorkspaceState(user);
-//                request.setAttribute(WORKSPACE_STATE, workspaceState);
+                String workspaceState = logDataSource.getInitialWorkspaceState(user);
+                request.setAttribute(WORKSPACE_STATE, workspaceState);
                 redirectUser(request, response, user);
             } catch (NullPointerException | SQLException e) {
                 e.printStackTrace();
@@ -59,7 +58,6 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO: Ask about how reconnection works
         String uri = request.getRequestURI();
         RequestDispatcher dispatcher;
         switch (uri) {

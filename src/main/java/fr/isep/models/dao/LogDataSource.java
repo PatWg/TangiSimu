@@ -101,7 +101,7 @@ public class LogDataSource implements LogDao {
 
     @Override
     public void runExercise(ExerciseLog exerciseLog) throws SQLException {
-
+        insertRunExerciseLog(exerciseLog);
     }
 
     private int insertEventWorkspaceLog(EventLog eventLog) throws SQLException {
@@ -266,6 +266,17 @@ public class LogDataSource implements LogDao {
             return rs.getString(ExerciseLog.WORKSPACE_XML);
         }
         return "";
+    }
+
+    private void insertRunExerciseLog(ExerciseLog exerciseLog)  throws SQLException {
+        String insertStatement = "INSERT INTO workspacexml (userid, exerciseid, action, xml, blocktime) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(insertStatement);
+        statement.setInt(1, Integer.parseInt(exerciseLog.getUserID()));
+        statement.setInt(2, exerciseLog.getCurrentExerciseID());
+        statement.setString(3, exerciseLog.getAction());
+        statement.setString(4, exerciseLog.getWorkspacexml());
+        statement.setString(5, exerciseLog.getTime());
     }
 
     private int getExerciseId(EventLog eventLog) {

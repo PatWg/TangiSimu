@@ -25,6 +25,7 @@ public class ExerciseServlet extends HttpServlet {
                 changeExercise(req, resp);
                 break;
             case URIHelper.BASE_URI + URIHelper.RUN_EXERCISE:
+                runExercise(req);
                 break;
             default:
                 throw new ServletException("An error occurred while processing your request.");
@@ -48,7 +49,14 @@ public class ExerciseServlet extends HttpServlet {
         }
     }
 
-    private void runExercise(HttpServletRequest request, HttpServletResponse response) {
-        // TODO: To implement
+    private void runExercise(HttpServletRequest request) throws IOException {
+        Gson gson = new Gson();
+        ExerciseLog exerciseLog = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), ExerciseLog.class);
+        try {
+            dataSource.runExercise(exerciseLog);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while saving a 'run' event to the database.");
+            System.out.println(e.getMessage());
+        }
     }
 }

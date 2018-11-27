@@ -248,8 +248,9 @@
     // var hexFileHeader;
 
     workspace.addChangeListener(mirrorEvent);
-    <%--var workspaceState = "\"" + ${workspace} + "\"";--%>
-    <%--loadXmlToWorkspace(workspaceState);--%>
+    var workspaceState = '${workspace}';
+    console.log(workspaceState)
+    loadXmlToWorkspace(workspaceState);
     var exerciseList = ${exercises};
     loadExerciseList(exerciseList);
 
@@ -343,6 +344,9 @@
         json = primaryEvent.toJson();
         console.log(json);
         var url;
+
+        document.getElementById("pythonArea").value = Blockly.Python.workspaceToCode(workspace);
+
         switch(primaryEvent.type){
             // ui event : category, click and select
             case "ui":
@@ -418,9 +422,21 @@
 
     // download python code as hex file
     const startDownload = async function(){
+       logExerciseRun();
+       var data = hexFileHeader.substr(0,hexFileHeader.length-31) + pythonToHex() + hexFileHeader.substr(-31);
+       download(data);
 
-        var data = hexFileHeader.substr(0,hexFileHeader.length-31) + pythonToHex() + hexFileHeader.substr(-31);
-        download(data);
+       function logExerciseRun() {
+           var json = {};
+           json.workspacexml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+           json.userID = document.getElementById("userId").innerHTML;
+           json.currentExerciseID = currentEx;
+           json.time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+           json.action = "exerciseRun";
+           var url = "${pageContext.request.contextPath}/runExercise";
+           postrequest(url, json);
+       }
+
         function download(data){
             const blob = new Blob([data],{type:'application/octet-stream'});
             const url = window.URL.createObjectURL(blob);
