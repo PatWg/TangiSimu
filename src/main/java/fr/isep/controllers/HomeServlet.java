@@ -16,10 +16,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 @WebServlet(name = "HomeServlet", urlPatterns = {"", URIHelper.SIMULATION_URI, URIHelper.TANGIBLE_URI})
 public class HomeServlet extends HttpServlet {
@@ -27,6 +31,7 @@ public class HomeServlet extends HttpServlet {
     private static final String EXERCISES_ATTRIBUTE = "exercises";
     private static final String EXERCISE_STATEMENT = "exerciseStatement";
     private static final String WORKSPACE_STATE = "workspace";
+    private static final String RUNTIME = "runtime";
 
     private UserDataSource userDataSource = new UserDataSource();
     private ExerciseDataSource exerciseDataSource = new ExerciseDataSource();
@@ -40,14 +45,17 @@ public class HomeServlet extends HttpServlet {
             try {
                 User user = userDataSource.createUser(firstName, lastName, isSimulation);
                 List<Exercise> exercises = retrieveExercises();
-                request.setAttribute(USER_ATTRIBUTE, user);
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<Exercise>>() {}.getType();
                 String json = gson.toJson(exercises, listType);
+                String workspaceState = logDataSource.getInitialWorkspaceState(user);
+                String runtimeFile = retrieveRuntimeFile();
+
+                request.setAttribute(USER_ATTRIBUTE, user);
                 request.setAttribute(EXERCISES_ATTRIBUTE, json);
                 request.setAttribute(EXERCISE_STATEMENT, exercises.get(0).getContent());
-                String workspaceState = logDataSource.getInitialWorkspaceState(user);
                 request.setAttribute(WORKSPACE_STATE, workspaceState);
+                request.setAttribute(RUNTIME, runtimeFile);
                 redirectUser(request, response, user);
             } catch (NullPointerException | SQLException e) {
                 e.printStackTrace();
@@ -107,5 +115,14 @@ public class HomeServlet extends HttpServlet {
 
     private List<Exercise> retrieveExercises() throws SQLException {
         return exerciseDataSource.getExercises();
+    }
+
+    private String retrieveRuntimeFile() {
+        Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/runtime.txt"));
+        StringBuilder stringBuilder = new StringBuilder();
+        while (scanner.hasNextLine()) {
+            stringBuilder.append(scanner.nextLine());
+        }
+        return stringBuilder.toString();
     }
 }

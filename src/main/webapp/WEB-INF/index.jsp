@@ -243,9 +243,7 @@
     var blockEvent = 0; // used to prevent the logging when changing workspace from javascript
     var currentGroup = null;
     var currentEx = 1;
-    // TODO: Ask about the use of this file
-    // TODO: File is in the server and should be loaded with the JSP
-    // var hexFileHeader;
+    var hexFileHeader = '${runtime}';
 
     workspace.addChangeListener(mirrorEvent);
     var workspaceState = '${workspace}';
