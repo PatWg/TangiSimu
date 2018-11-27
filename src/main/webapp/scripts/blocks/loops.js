@@ -117,27 +117,28 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
         "extensions": ["controls_whileUntil_tooltip"]
     },
-    //custome while loop.
+    //custom while loop.
     {
         "type": "controls_while",
-        "message0": "while %1 %2 %3",
+        "message0": "tant que %1 %2 faire %3",
         "args0": [
             {
                 "type": "input_dummy"
             },
             {
                 "type": "input_value",
-                "name": "BOOL",
+                "name": "NAME",
                 "check": "Boolean"
             },
             {
                 "type": "input_statement",
-                "name": "DO"
+                "name": "DO",
+                "align": "CENTRE"
             }
         ],
-        "inputsInline": false,
-        "colour": 105,
-        "tooltip": "",
+        "inputsInline": true,
+        "colour": "%{BKY_LOOPS_HUE}",
+        "tooltip": "tant que c'est vrai, fait l'instruction",
         "helpUrl": ""
     },
     // Block for 'for' loop.
@@ -179,12 +180,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "nextStatement": null,
         "colour": "%{BKY_LOOPS_HUE}",
         "helpUrl": "%{BKY_CONTROLS_FOR_HELPURL}",
+        "tooltip": "fixe la variable a une valeur de début, et répètes les instructions en incrémentant la variable jusqu'a atteindre son maximum",
         "extensions": [
             "contextMenu_newGetVariableBlock",
             "controls_for_tooltip"
         ]
     },
-    // Block for 'for each' loop.
+// Block for 'for each' loop.
     {
         "type": "controls_forEach",
         "message0": "%{BKY_CONTROLS_FOREACH_TITLE}",
@@ -214,7 +216,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             "controls_forEach_tooltip"
         ]
     },
-    // Block for flow statements: continue, break.
+// Block for flow statements: continue, break.
     {
         "type": "controls_flow_statements",
         "message0": "%1",
@@ -281,7 +283,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
      * @param {!Array} options List of menu options to add to.
      * @this Blockly.Block
      */
-    customContextMenu: function(options) {
+    customContextMenu: function (options) {
         var varName = this.getFieldValue('VAR');
         if (!this.isCollapsed() && varName != null) {
             var option = {enabled: true};
@@ -323,14 +325,14 @@ Blockly.Constants.Loops.CONTROL_FLOW_CHECK_IN_LOOP_MIXIN = {
      * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
      */
     LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-        'controls_for', 'controls_whileUntil','controls_while'],
+        'controls_for', 'controls_whileUntil', 'controls_while'],
     /**
      * Called whenever anything on the workspace changes.
      * Add warning if this flow block is not nested inside a loop.
      * @param {!Blockly.Events.Abstract} e Change event.
      * @this Blockly.Block
      */
-    onchange: function(/* e */) {
+    onchange: function (/* e */) {
         if (!this.workspace.isDragging || this.workspace.isDragging()) {
             return;  // Don't change state at the start of a drag.
         }
