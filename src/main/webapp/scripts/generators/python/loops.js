@@ -70,6 +70,16 @@ Blockly.Python['controls_whileUntil'] = function(block) {
   return 'while ' + argument0 + ':\n' + branch;
 };
 
+Blockly.Python['controls_while'] = function(block) {
+    var value_while = Blockly.Python.valueToCode(block, 'WHILE', Blockly.Python.ORDER_ATOMIC);
+    var statements_do = Blockly.Python.statementToCode(block, 'DO');
+    statements_do = Blockly.Python.addLoopTrap(statements_do, block.id);
+    if (value_while == null || value_while == '') value_while = 'False';
+    if (statements_do == null || statements_do == '') statements_do = Blockly.Python.PASS;
+    var code = 'while ' + value_while + ':\n' + statements_do;
+    return code;
+};
+
 Blockly.Python['controls_for'] = function(block) {
   // For loop.
   var variable0 = Blockly.Python.variableDB_.getName(

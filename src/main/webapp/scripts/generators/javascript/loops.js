@@ -78,7 +78,6 @@ Blockly.JavaScript['controls_while'] = function(block) {
     var value_while = Blockly.JavaScript.valueToCode(block, 'WHILE', Blockly.JavaScript.ORDER_ATOMIC);
     var statements_name = Blockly.JavaScript.statementToCode(block, 'DO');
     statements_name = Blockly.JavaScript.addLoopTrap(statements_name, block.id);
-    // TODO: Assemble JavaScript into code variable.
     if (value_while == null || value_while == '') value_while = 'false';
     var code = 'while (' + value_while + ') {\n' + statements_name + '}\n';
     return code;

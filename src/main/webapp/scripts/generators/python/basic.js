@@ -10,12 +10,22 @@ Blockly.Python.addReservedWords('microbit, display, show, sleep, set_pixel');
 
 Blockly.Python['show_number'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
-    var number_value = block.getFieldValue('VALUE');
-    if (number_value.length > 1) {
-        return 'display.scroll(\'' + number_value + '\')\n';
+    var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+    if (value_name == null) value_name = '';
+    if (value_name.length > 1) {
+        return 'display.scroll(\'' + value_name + '\')\n';
     }
-    return 'display.show(\'' + number_value + '\')\n';
+    return 'display.show(\'' + value_name + '\')\n';
 };
+
+// Blockly.Python['show_number'] = function(block) {
+//     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
+//     var number_value = block.getFieldValue('VALUE');
+//     if (number_value.length > 1) {
+//         return 'display.scroll(\'' + number_value + '\')\n';
+//     }
+//     return 'display.show(\'' + number_value + '\')\n';
+// };
 
 Blockly.Python['show_leds'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';

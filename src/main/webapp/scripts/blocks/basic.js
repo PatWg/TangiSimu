@@ -18,17 +18,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "message0": "Afficher %1 %2",
         "args0": [
             {
-                "type": "input_dummy"
+                "type": "input_value",
+                "name": "NAME"
             },
             {
-                "type": "input_value",
-                "name": "NAME",
-                "check": "Number"
+                "type": "input_dummy"
             }
         ],
-        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
         "colour": 205,
-        "tooltip": "",
+        "tooltip": "Affiche un nombre à l'écran. S'il est trop grand, celui-ci va défiler à l'écran.",
         "helpUrl": ""
     },
     {

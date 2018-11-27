@@ -191,7 +191,7 @@
     <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
     <category name="Basic" colour="#6d5ba5">
         <block type="show_number">
-            <field name="VALUE">0</field>
+            <%--<field name="VALUE">0</field>--%>
         </block>
         <block type="show_leds">
             <field name="LED1_1">FALSE</field>
