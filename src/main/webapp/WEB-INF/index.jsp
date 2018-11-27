@@ -52,7 +52,7 @@
 <!-- TODO: Change the following line to manage simulation and tangible object -->
 <button onclick="startDownload()">Lancer le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
-    <category name="Logic" colour="#5C81A6">
+    <category name="Logique" colour="#5C81A6">
         <block type="logic_boolean"></block>
         <block type="controls_if"></block>
         <block type="controls_ifelse"></block>
@@ -92,7 +92,7 @@
             <field name="FLOW">BREAK</field>
         </block>
     </category>
-    <category name="Math" colour="#5C68A6">
+    <category name="Maths" colour="#5C68A6">
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
@@ -189,7 +189,7 @@
     </category>
     <sep></sep>
     <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
-    <category name="Basic" colour="#6d5ba5">
+    <category name="Microbit" colour="#6d5ba5">
         <block type="show_number">
             <%--<field name="VALUE">0</field>--%>
         </block>
