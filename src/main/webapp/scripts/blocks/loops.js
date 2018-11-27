@@ -120,25 +120,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     //custom while loop.
     {
         "type": "controls_while",
-        "message0": "tant que %1 %2 faire %3",
+        "message0": "tant que %1 faire %2",
         "args0": [
             {
-                "type": "input_dummy"
-            },
-            {
                 "type": "input_value",
-                "name": "NAME",
+                "name": "WHILE",
                 "check": "Boolean"
             },
             {
                 "type": "input_statement",
-                "name": "DO",
-                "align": "CENTRE"
+                "name": "DO"
             }
         ],
-        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
         "colour": "%{BKY_LOOPS_HUE}",
-        "tooltip": "tant que c'est vrai, fait l'instruction",
+        "tooltip": "Tant que c'est vrai, fait l'instruction",
         "helpUrl": ""
     },
     // Block for 'for' loop.
