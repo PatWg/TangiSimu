@@ -12,10 +12,11 @@ Blockly.Python['show_number'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
     if (value_name == null) value_name = '';
-    if (value_name.length > 1) {
-        return 'display.scroll(\'' + value_name + '\')\n';
+    var numeric_value = value_name.toString();
+    if (numeric_value > 9) {
+        return 'display.scroll(\'' + numeric_value + '\')\n';
     }
-    return 'display.show(\'' + value_name + '\')\n';
+    return 'display.show(\'' + numeric_value + '\')\n';
 };
 
 // Blockly.Python['show_number'] = function(block) {
@@ -66,8 +67,8 @@ Blockly.Python['show_leds'] = function(block) {
 
     for (var i = 0; i < 5; i++) {
         for (var j = 0; j < 5; j++) {
-            if (leds[i][j] == true) {
-                code += 'display.set_pixel(' + i + ' ,' + j + ', 9)\n';
+            if (leds[j][i] == true) {
+                code += 'display.set_pixel(' + j + ' ,' + i + ', 9)\n';
             }
         }
     }
