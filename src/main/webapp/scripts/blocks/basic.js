@@ -45,22 +45,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
-                "name": "LED1_2",
+                "name": "LED2_1",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED1_3",
+                "name": "LED3_1",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED1_4",
+                "name": "LED4_1",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED1_5",
+                "name": "LED5_1",
                 "checked": false
             },
             {
@@ -68,7 +68,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
-                "name": "LED2_1",
+                "name": "LED1_2",
                 "checked": false
             },
             {
@@ -78,53 +78,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
-                "name": "LED2_3",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED2_4",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED2_5",
-                "checked": false
-            },
-            {
-                "type": "input_dummy"
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED3_1",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
                 "name": "LED3_2",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED3_3",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED3_4",
-                "checked": false
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED3_5",
-                "checked": false
-            },
-            {
-                "type": "input_dummy"
-            },
-            {
-                "type": "field_checkbox",
-                "name": "LED4_1",
                 "checked": false
             },
             {
@@ -134,7 +88,53 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
+                "name": "LED5_2",
+                "checked": false
+            },
+            {
+                "type": "input_dummy"
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED1_3",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED2_3",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED3_3",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
                 "name": "LED4_3",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED5_3",
+                "checked": false
+            },
+            {
+                "type": "input_dummy"
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED1_4",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED2_4",
+                "checked": false
+            },
+            {
+                "type": "field_checkbox",
+                "name": "LED3_4",
                 "checked": false
             },
             {
@@ -144,7 +144,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
-                "name": "LED4_5",
+                "name": "LED5_4",
                 "checked": false
             },
             {
@@ -152,22 +152,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             },
             {
                 "type": "field_checkbox",
-                "name": "LED5_1",
+                "name": "LED1_5",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED5_2",
+                "name": "LED2_5",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED5_3",
+                "name": "LED3_5",
                 "checked": false
             },
             {
                 "type": "field_checkbox",
-                "name": "LED5_4",
+                "name": "LED4_5",
                 "checked": false
             },
             {
@@ -180,7 +180,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": 205,
-        "tooltip": "Turn on leds as specified in the input",
+        "tooltip": "Allume les DEL comme indiqué par l'image",
         "helpUrl": ""
     },
     {
