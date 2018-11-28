@@ -52,184 +52,36 @@
 <!-- TODO: Change the following line to manage simulation and tangible object -->
 <button onclick="startDownload()">Lancer le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+    <category name="Affichage" colour="#6d5ba5">
+        <block type="show_number"></block>
+        <block type="show_leds"></block>
+        <block type="pause"></block>
+        <block type="show_icon"></block>
+    </category>
+    <category name="Math" colour="#5C68A6">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_number_property"></block>
+        <block type="math_modulo"></block>
+        <block type="math_random_int"></block>
+        <block type="math_random_float"></block>
+    </category>
+    <sep></sep>
+    <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
     <category name="Logique" colour="#5C81A6">
         <block type="logic_boolean"></block>
         <block type="controls_if"></block>
         <block type="controls_ifelse"></block>
         <block type="logic_negate"></block>
-        <block type="logic_compare">
-            <field name="OP">EQ</field>
-        </block>
-        <block type="logic_operation">
-            <field name="OP">AND</field>
-        </block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
     </category>
-    <category name="Loops" colour="#5CA65C">
-        <block type="controls_repeat_ext">
-            <value name="TIMES">
-            </value>
-        </block>
+    <category name="Boucle" colour="#5CA65C">
+        <block type="controls_repeat_ext"></block>
         <block type="controls_while"></block>
-        <block type="controls_for">
-            <field name="VAR" id="PO(Nz1Dp]zeuWcA_A8Ch" variabletype="">i</field>
-            <value name="FROM">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="TO">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-            <value name="BY">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="controls_flow_statements">
-            <field name="FLOW">BREAK</field>
-        </block>
     </category>
-    <category name="Maths" colour="#5C68A6">
-        <block type="math_number">
-            <field name="NUM">0</field>
-        </block>
-        <block type="math_arithmetic">
-            <field name="OP">ADD</field>
-            <value name="A">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="B">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_single">
-            <field name="OP">ROOT</field>
-            <value name="NUM">
-                <shadow type="math_number">
-                    <field name="NUM">9</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_trig">
-            <field name="OP">SIN</field>
-            <value name="NUM">
-                <shadow type="math_number">
-                    <field name="NUM">45</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_constant">
-            <field name="CONSTANT">PI</field>
-        </block>
-        <block type="math_number_property">
-            <mutation divisor_input="false"></mutation>
-            <field name="PROPERTY">EVEN</field>
-            <value name="NUMBER_TO_CHECK">
-                <shadow type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_number">
-            <field name="NUM">0</field>
-        </block>
-        <block type="math_on_list">
-            <mutation op="SUM"></mutation>
-            <field name="OP">SUM</field>
-        </block>
-        <block type="math_modulo">
-            <value name="DIVIDEND">
-                <shadow type="math_number">
-                    <field name="NUM">64</field>
-                </shadow>
-            </value>
-            <value name="DIVISOR">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_constrain">
-            <value name="VALUE">
-                <shadow type="math_number">
-                    <field name="NUM">50</field>
-                </shadow>
-            </value>
-            <value name="LOW">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="HIGH">
-                <shadow type="math_number">
-                    <field name="NUM">100</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_random_int">
-            <value name="FROM">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="TO">
-                <shadow type="math_number">
-                    <field name="NUM">100</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="math_random_float"></block>
-    </category>
-    <sep></sep>
-    <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
-    <category name="Microbit" colour="#6d5ba5">
-        <block type="show_number">
-            <%--<field name="VALUE">0</field>--%>
-        </block>
-        <block type="show_leds">
-            <field name="LED1_1">FALSE</field>
-            <field name="LED1_2">FALSE</field>
-            <field name="LED1_3">FALSE</field>
-            <field name="LED1_4">FALSE</field>
-            <field name="LED1_5">FALSE</field>
-            <field name="LED2_1">FALSE</field>
-            <field name="LED2_2">FALSE</field>
-            <field name="LED2_3">FALSE</field>
-            <field name="LED2_4">FALSE</field>
-            <field name="LED2_5">FALSE</field>
-            <field name="LED3_1">FALSE</field>
-            <field name="LED3_2">FALSE</field>
-            <field name="LED3_3">FALSE</field>
-            <field name="LED3_4">FALSE</field>
-            <field name="LED3_5">FALSE</field>
-            <field name="LED4_1">FALSE</field>
-            <field name="LED4_2">FALSE</field>
-            <field name="LED4_3">FALSE</field>
-            <field name="LED4_4">FALSE</field>
-            <field name="LED4_5">FALSE</field>
-            <field name="LED5_1">FALSE</field>
-            <field name="LED5_2">FALSE</field>
-            <field name="LED5_3">FALSE</field>
-            <field name="LED5_4">FALSE</field>
-            <field name="LED5_5">FALSE</field>
-        </block>
-        <block type="show_string">
-            <field name="VALUE">default</field>
-        </block>
-        <block type="pause">
-            <field name="VALUE">100</field>
-        </block>
-        <block type="show_icon" colour="#6d5ba5">
-            <field name="ICON">HEART</field>
-        </block>
-    </category>
+
 </xml>
 
 
