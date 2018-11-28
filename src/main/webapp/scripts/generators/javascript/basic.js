@@ -8,7 +8,7 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['show_number'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
     // TODO: Assemble JavaScript into code variable.
-    var code = 'basic.showNumber(' + value_name + ');\n';
+    var code = 'addNumber(' + value_name + ');\n';
     return code;
 };
 
@@ -40,25 +40,13 @@ Blockly.JavaScript['show_leds'] = function(block) { /// not finished
     var checkbox_led5_5 = block.getFieldValue('LED5_5') == 'TRUE';
 
     var leds = [
-        [checkbox_led1_1, checkbox_led1_2, checkbox_led1_3, checkbox_led1_4, checkbox_led1_5],
-        [checkbox_led2_1, checkbox_led2_2, checkbox_led2_3, checkbox_led2_4, checkbox_led2_5],
-        [checkbox_led3_1, checkbox_led3_2, checkbox_led3_3, checkbox_led3_4, checkbox_led3_5],
-        [checkbox_led4_1, checkbox_led4_2, checkbox_led4_3, checkbox_led4_4, checkbox_led4_5],
-        [checkbox_led5_1, checkbox_led5_2, checkbox_led5_3, checkbox_led5_4, checkbox_led5_5]
-    ];
-    var code = '';
+        [checkbox_led1_1, checkbox_led2_1, checkbox_led3_1, checkbox_led4_1, checkbox_led5_1],
+        [checkbox_led1_2, checkbox_led2_2, checkbox_led3_2, checkbox_led4_2, checkbox_led5_2],
+        [checkbox_led1_3, checkbox_led2_3, checkbox_led3_3, checkbox_led4_3, checkbox_led5_3],
+        [checkbox_led1_4, checkbox_led2_4, checkbox_led3_4, checkbox_led4_4, checkbox_led5_4],
+        [checkbox_led1_5, checkbox_led2_5, checkbox_led3_5, checkbox_led4_5, checkbox_led5_5]];
 
-    for (var i = 0; i < 5; i++) {
-        for (var j = 0; j < 5; j++) {
-            if (leds[j][i] == true) {
-                code += 'display.set_pixel(' + j + ' ,' + i + ', 9)\n';
-            }
-        }
-    }
-    return code;
-
-
-    return "";
+    return "addMatrix(" + JSON.stringify(leds) + "); \n";
 };
 
 Blockly.JavaScript['pause'] = function(block) {
@@ -72,4 +60,12 @@ Blockly.JavaScript['pause'] = function(block) {
     var code = "pause("+num.toString()+");\n";
 
     return code;
+};
+
+Blockly.JavaScript['show_icon'] = function(block){
+
+
+
+
+    return "";
 };

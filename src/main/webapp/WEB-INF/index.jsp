@@ -51,6 +51,7 @@
 
 <!-- TODO: Change the following line to manage simulation and tangible object -->
 <button onclick="startDownload()">Lancer le programme</button>
+<button onclick="startSimulation()"> Lancer la simulation</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
@@ -733,6 +734,11 @@
     function addNumber(i){
         led.push(intToArray(i));
     }
+
+    function addMatrix(arr){
+        led.push(arr);
+    }
+
     var intToLed=[[[0,1,1,0,0],[1,0,0,1,0],[1,0,0,1,0],[1,0,0,1,0],[0,1,1,0,0]], //0
         [[0,0,1,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,1,1,1,0]], //1
         [[1,1,1,0,0],[0,0,0,1,0],[0,1,1,0,0],[1,0,0,0,0],[1,1,1,1,0]], //2
@@ -754,6 +760,17 @@
             }
         }
         return array;
+    }
+
+    function startSimulation(){
+        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        console.log(code);
+        try{
+            eval(code);
+            console.log("done");
+        } catch(e){
+            alert(e);
+        }
     }
 
 </script>
