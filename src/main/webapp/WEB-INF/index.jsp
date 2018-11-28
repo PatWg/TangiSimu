@@ -650,9 +650,9 @@
        }
 
         function download(data){
-            const blob = new Blob([data],{type:'application/octet-stream'});
-            const url = window.URL.createObjectURL(blob);
-            const a= document.createElement('a');
+            blob = new Blob([data],{type:'application/octet-stream'});
+            url = window.URL.createObjectURL(blob);
+            a= document.createElement('a');
             a.setAttribute('hidden','');
             a.setAttribute('href',url);
             a.setAttribute('download','download.hex');
@@ -735,6 +735,7 @@
     }
 
     // ALL the following code is for the simulation - May not be used
+    var SET_INTERVAL = 200;
     var led = [];
     showNumber();
     function showNumber(){
