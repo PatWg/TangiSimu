@@ -421,8 +421,23 @@
     // download python code as hex file
     const startDownload = async function(){
        logExerciseRun();
-       var data = hexFileHeader.substr(0,hexFileHeader.length-31) + pythonToHex() + hexFileHeader.substr(-31);
-       download(data);
+       var json = {}
+       var script = Blockly.Python.workspaceToCode(workspace);
+       json.script = script;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // Typical action to be performed when the document is ready:
+                console.log(xhttp.responseText);
+                download(xhttp.responseText);
+            }
+        };
+        xhttp.open("POST", "${pageContext.request.contextPath}/hexlify", json, true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(JSON.stringify(json));
+
+       // var data = hexFileHeader.substr(0,hexFileHeader.length-31) + pythonToHex() + hexFileHeader.substr(-31);
+       // download(data);
 
        function logExerciseRun() {
            var json = {};
@@ -443,62 +458,55 @@
             a.setAttribute('href',url);
             a.setAttribute('download','download.hex');
             a.click();
-        };
+        }
 
         function pythonToHex(){
             var pythonCode = Blockly.Python.workspaceToCode(workspace);
             //var pythonCode = "from microbit import *\nwhile True:\n\tdisplay.set_pixel(0,0,9)\n\tdisplay.set_pixel(0,2,9)\n\tdisplay.set_pixel(0,4,9)\n\tdisplay.set_pixel(1,0,9)\n\tdisplay.set_pixel(1,1,9)\n\tdisplay.set_pixel(1,2,9)\n\tdisplay.set_pixel(1,3,9)\n\tdisplay.set_pixel(1,4,9)";
             dataLength = 4 + pythonCode.length + (16 - (4 + pythonCode.length) % 16);
-            var data = [];
+            var data = new Uint8Array(dataLength);
             data[0] = 77;
             data[1] = 80;
-            data[2] = unsignedToSignedBit(pythonCode.length & 0xFF);
-            data[3] = unsignedToSignedBit((pythonCode.length >> 8) & 0xff);
+            data[2] = pythonCode.length & 0xFF;
+            data[3] = (pythonCode.length >> 8) & 0xff;
             for (var i = 0; i < pythonCode.length; ++i) {
-                data[4+i] = unsignedToSignedBit((pythonCode.charCodeAt(i) & 0xFF));
+                data[4+i] = pythonCode.charCodeAt(i);
             }
             if (dataLength > 8192) {
                 throw new Exception("Script is too long");
             }
             var addr = 0x3e000;
-            var chunk = [];
+            var chunk = new Uint8Array(5 + 16);
             var stringBuilder = [];
             stringBuilder.push(":020000040003F7","\n");
             for (var i = 0; i < dataLength; i += 16) {
                 chunk = [];
                 chunk[0] = 16;
-                chunk[1] = unsignedToSignedBit((addr >> 8) & 0xFF);
-                chunk[2] = unsignedToSignedBit(addr & 0xFF);
+                chunk[1] = (addr >> 8) & 0xFF;
+                chunk[2] = addr & 0xFF;
                 chunk[3] = 0;
-                for (var j = 0; j < 16; j++) {
-                    chunk[4 + j] = unsignedToSignedBit(data[i + j] | 0);
+                for (var j = 0; j < 16; ++j) {
+                    chunk[4 + j] = data[i + j];
                 }
-                var checksum = 0x0;
-                for (var j = 0; j < 4 + 16; j++) {
-                    checksum += unsignedToSignedBit(chunk[j] & 0xFF);
+                var checksum = 0;
+                for (var j = 0; j < 4 + 16; ++j) {
+                    checksum += chunk[j];
                 }
 
-                chunk[20] = (-checksum & 0xFF);
+                chunk[4 + 16] = (-checksum) & 0xFF;
                 console.log(chunk);
-                stringBuilder.push(':',toHexString(chunk).toUpperCase(),"\n");
-                addr += 16;
+                stringBuilder.push(':'+toHexString(chunk).toUpperCase());
             }
-            return stringBuilder.join('');
+            return stringBuilder.join('\n');
         }
 
-        function toHexString(byteArray){
-            var ret = "";
-            for (var i=0;i<byteArray.length;i++){
-                a = byteArray[i];
-                if (a<0){
-                    a+=256;
+        function toHexString(byteArray) {
+            var ret = '';
+            for (var i = 0; i < byteArray.length; ++i) {
+                if (byteArray[i] < 16) {
+                    ret += '0';
                 }
-                if (a < 16){
-                    ret += "0"+a.toString(16);
-                }
-                else{
-                    ret += a.toString(16);
-                }
+                ret += byteArray[i].toString(16);
             }
             return ret;
         }
@@ -509,7 +517,7 @@
             }
             return i;
         }
-    };
+    }
 
 
     /* // ALL the following code is for the simulation - May not be used

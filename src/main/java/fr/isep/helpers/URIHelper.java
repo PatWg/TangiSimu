@@ -14,4 +14,5 @@ public class URIHelper {
     public static final String VARIABLE_LOG = "/varEvent";
     public static final String CHANGE_EXERCISE = "/currentExercise";
     public static final String RUN_EXERCISE = "/runExercise";
+    public static final String HEXLIFY = "/hexlify";
 }
