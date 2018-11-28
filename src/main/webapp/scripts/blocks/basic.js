@@ -28,7 +28,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": 205,
-        "tooltip": "Affiche un nombre à l'écran. S'il est trop grand, celui-ci va défiler à l'écran.",
+        "tooltip": "Affiche la valeur d'une variable/nombre sur la carte.",
         "helpUrl": ""
     },
     {
@@ -180,7 +180,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": 205,
-        "tooltip": "Allume les DEL comme indiqué par l'image",
+        "tooltip": "Affiche une configuration spécifique sur la carte.",
         "helpUrl": ""
     },
     {
@@ -214,7 +214,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": 205,
-        "tooltip": "Makes the Micro:bit pauses ",
+        "tooltip": "Définit un temps d'attente.",
         "helpUrl": ""
     },
     {
@@ -411,7 +411,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": 205,
-        "tooltip": "",
+        "tooltip": "Affiche une configuration au choix sur la carte.",
         "helpUrl": ""
     }
 ]); // END JSON EXTRACT (Do not delete this comment.)
