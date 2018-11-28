@@ -102,19 +102,7 @@ Blockly.Python['show_icon'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var dropdown_icon = block.getFieldValue('ICON');
     var image_name = 'IMAGE.';
-    switch (dropdown_icon) {
-        case 'HEART':
-            image_name += 'HEART';
-            break;
-        case 'SMALL_HEART':
-            image_name += 'HEART_SMALL';
-            break;
-        case 'HAPPY':
-            image_name += 'HAPPY';
-            break;
-        default:
-            image_name += 'SMILE'
-    }
+    image_name += dropdown_icon;
     var code = 'display.show(' + image_name + ')\n';
     return code;
 };
