@@ -209,7 +209,7 @@
             case "create":
                 url = "${pageContext.request.contextPath}/createBlock";
                 console.log(url);
-                json.xml = json.xml.replace(' xmlns="http://www.w3.org/1999/xhtml"','');
+                json.xml = json.xml.split('type="')[1].split('"')[0];
                 break;
             // move event : when a block is moved
             // combine event : when a block has a new parent
