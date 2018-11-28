@@ -311,64 +311,6 @@
             a.setAttribute('download','download.hex');
             a.click();
         }
-
-        function pythonToHex(){
-            var pythonCode = Blockly.Python.workspaceToCode(workspace);
-            //var pythonCode = "from microbit import *\nwhile True:\n\tdisplay.set_pixel(0,0,9)\n\tdisplay.set_pixel(0,2,9)\n\tdisplay.set_pixel(0,4,9)\n\tdisplay.set_pixel(1,0,9)\n\tdisplay.set_pixel(1,1,9)\n\tdisplay.set_pixel(1,2,9)\n\tdisplay.set_pixel(1,3,9)\n\tdisplay.set_pixel(1,4,9)";
-            dataLength = 4 + pythonCode.length + (16 - (4 + pythonCode.length) % 16);
-            var data = new Uint8Array(dataLength);
-            data[0] = 77;
-            data[1] = 80;
-            data[2] = pythonCode.length & 0xFF;
-            data[3] = (pythonCode.length >> 8) & 0xff;
-            for (var i = 0; i < pythonCode.length; ++i) {
-                data[4+i] = pythonCode.charCodeAt(i);
-            }
-            if (dataLength > 8192) {
-                throw new Exception("Script is too long");
-            }
-            var addr = 0x3e000;
-            var chunk = new Uint8Array(5 + 16);
-            var stringBuilder = [];
-            stringBuilder.push(":020000040003F7","\n");
-            for (var i = 0; i < dataLength; i += 16) {
-                chunk = [];
-                chunk[0] = 16;
-                chunk[1] = (addr >> 8) & 0xFF;
-                chunk[2] = addr & 0xFF;
-                chunk[3] = 0;
-                for (var j = 0; j < 16; ++j) {
-                    chunk[4 + j] = data[i + j];
-                }
-                var checksum = 0;
-                for (var j = 0; j < 4 + 16; ++j) {
-                    checksum += chunk[j];
-                }
-
-                chunk[4 + 16] = (-checksum) & 0xFF;
-                console.log(chunk);
-                stringBuilder.push(':'+toHexString(chunk).toUpperCase());
-            }
-            return stringBuilder.join('\n');
-        }
-
-        function toHexString(byteArray) {
-            var ret = '';
-            for (var i = 0; i < byteArray.length; ++i) {
-                if (byteArray[i] < 16) {
-                    ret += '0';
-                }
-                ret += byteArray[i].toString(16);
-            }
-            return ret;
-        }
-
-        function unsignedToSignedBit(i){
-            if (i > 128) {
-                i = i-256;
-            }
-            return i;
-        }
     }
 
 
