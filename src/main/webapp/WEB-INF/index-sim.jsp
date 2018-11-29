@@ -37,9 +37,6 @@
     <p>Bonjour ${user.fname} ${user.lname} !<br/>
     Identifiant à mémoriser : <span id="userId">${user.userid}</span></p>
     <select id="exerciselist" onchange="changeExercise(this)">
-        <%--<c:forEach items="${exercises}" var="element">--%>
-            <%--<option>${element.title}</option>--%>
-        <%--</c:forEach>--%>
     </select>
     <p id="exerciseStatement"></p>
 </div>
@@ -394,12 +391,9 @@
         <g></g>
         <g></g>
     </svg>
-    <%--<textarea id="pythonArea" disabled></textarea>--%>
 </div>
 
-<!-- TODO: Change the following line to manage simulation and tangible object -->
-<button onclick="startDownload()">Lancer le programme</button>
-<button onclick="startSimulation()"> Lancer la simulation</button>
+<button onclick="runProgram()">Lancer le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
@@ -620,7 +614,7 @@
 
 
     // download python code as hex file
-    const startDownload = async function(){
+    const runProgram = async function(){
        logExerciseRun();
        var json = {}
        var script = Blockly.Python.workspaceToCode(workspace);
@@ -628,9 +622,7 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                // Typical action to be performed when the document is ready:
-                console.log(xhttp.responseText);
-                download(xhttp.responseText);
+                startSimulation();
             }
         };
         xhttp.open("POST", "${pageContext.request.contextPath}/hexlify", json, true);

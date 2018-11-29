@@ -97,10 +97,9 @@ public class HomeServlet extends HttpServlet {
     private void redirectUser(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         if (user.isSimorobj()) {
-            // TODO: Redirect to a version with the simulation
-            dispatcher = request.getRequestDispatcher("/WEB-INF/index.jsp");
+            dispatcher = request.getRequestDispatcher("/WEB-INF/index-sim.jsp");
         } else {
-            dispatcher = request.getRequestDispatcher("/WEB-INF/index.jsp");
+            dispatcher = request.getRequestDispatcher("/WEB-INF/index-tan.jsp");
         }
         dispatcher.forward(request, response);
     }

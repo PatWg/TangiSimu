@@ -18,6 +18,13 @@ a {
     float: left;
 }
 
+#instructions {
+    width: 50%;
+    height: 100%;
+    float: right;
+    padding: 0px 60px 15px 15px;
+}
+
 #pythonArea {
     width: 30%;
     height: 100%;
