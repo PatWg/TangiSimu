@@ -13,7 +13,7 @@ a {
 }
 
 #blocklyDiv {
-    width: 60%;
+    width: 50%;
     height: 100%;
     float: left;
 }
@@ -45,8 +45,8 @@ a:link
 
 svg.sim {
     box-sizing: border-box;
-    width: 20%;
-    height: 20%;
+    width: 30%;
+    height: 50%;
     display: block;
 }
 svg.sim.grayscale {
