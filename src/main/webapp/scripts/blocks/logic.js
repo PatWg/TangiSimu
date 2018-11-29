@@ -116,7 +116,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": "%{BKY_LOGIC_HUE}",
-        "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
+        "tooltip": "Si la condition est vraie, alors exécute certains blocs, sinon en exécute des autres.",
         "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
         "extensions": ["controls_if_tooltip"]
     },
