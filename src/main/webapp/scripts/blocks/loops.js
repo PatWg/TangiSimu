@@ -135,7 +135,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "previousStatement": null,
         "nextStatement": null,
         "colour": "%{BKY_LOOPS_HUE}",
-        "tooltip": "Tant que c'est vrai, fait l'instruction",
+        "tooltip": "Tant que c'est vrai, exécute la/les instruction(s).",
         "helpUrl": ""
     },
     // Block for 'for' loop.
