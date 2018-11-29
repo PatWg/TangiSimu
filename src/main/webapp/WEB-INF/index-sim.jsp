@@ -743,13 +743,25 @@
         [[0,1,1,1,0],[1,0,0,0,1],[0,1,1,1,0],[1,0,0,0,1],[0,1,1,1,0]], //8
         [[0,1,1,1,0],[1,0,0,0,1],[0,1,1,1,0],[0,0,1,0,0],[0,1,0,0,0]]]; //9
 
+    var negativeToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,1,1,1,0],[0,0,0,0,0],[0,0,0,0,0]];
+    var dotToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0]];
+
     function intToArray(val){
         var temp;
         var array =[[],[],[],[],[]];
-        for (var i=0;i<val.toString().length;i++){
-            temp = parseInt(val.toString().charAt(i));
+        var str = val.toString();
+        for (var i=0;i<str.length;i++){
+            if (str.charAt(i) == "-"){
+                temp = negativeToLed;
+            }
+            else if ((str.charAt(i) == ",") || (str.charAt(i) == ".")){
+                temp = dotToLed;
+            }
+            else{
+                temp = intToLed[parseInt(str.charAt(i))];
+            }
             for (var j=0;j<5;j++){
-                array[j] = array[j].concat(intToLed[temp][j]);
+                array[j] = array[j].concat(temp[j]);
             }
         }
         return array;
