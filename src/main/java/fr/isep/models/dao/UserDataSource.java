@@ -24,6 +24,8 @@ public class UserDataSource implements UserDao {
             statement.setString(2, lastName);
             statement.setBoolean(3, simOrObject);
             statement.executeUpdate();
+        } else {
+            updateUserEnvironment(firstName, lastName, simOrObject);
         }
         return getUser(firstName, lastName);
     }
@@ -43,5 +45,14 @@ public class UserDataSource implements UserDao {
             return user;
         }
         return null;
+    }
+
+    private void updateUserEnvironment(String firstName, String lastName, boolean simOrObject) throws SQLException {
+        String updateStatement = "UPDATE userlist SET simorobj = ? WHERE fname = ? AND lname = ?";
+        PreparedStatement statement = connection.prepareStatement(updateStatement);
+        statement.setBoolean(1, simOrObject);
+        statement.setString(2, firstName);
+        statement.setString(3, lastName);
+        statement.executeUpdate();
     }
 }
