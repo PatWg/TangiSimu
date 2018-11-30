@@ -429,6 +429,7 @@
 
 
 <script>
+    var isDev = true;
     var workspace = Blockly.inject('blocklyDiv', {
         toolbox: document.getElementById('toolbox')
     });
@@ -442,7 +443,7 @@
 
     workspace.addChangeListener(mirrorEvent);
     var workspaceState = '${workspace}';
-    console.log(workspaceState)
+    if (isDev) console.log(workspaceState)
     loadXmlToWorkspace(workspaceState);
     var exerciseList = ${exercises};
     loadExerciseList(exerciseList);
@@ -480,16 +481,16 @@
         json.time =new Date().toISOString().slice(0, 19).replace('T',' ');
         json.action= "exerciseChangement";
         json.newExerciseID = obj[obj.selectedIndex].value;
-        console.log("CHANGE EXERCISE: " , json);
+        if (isDev) console.log("CHANGE EXERCISE: " , json);
         blockEvent+=1;
         workspace.clear();
-        console.log(exerciseList[0]);
+        if (isDev) console.log(exerciseList[0]);
         document.querySelector("#exerciseStatement").innerHTML = exerciseList[(obj[obj.selectedIndex].value)-1]["content"];
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 // Typical action to be performed when the document is ready:
-                console.log(xhttp.responseText);
+                if (isDev) console.log(xhttp.responseText);
                 loadXmlToWorkspace(xhttp.responseText);
             }
         };
@@ -499,7 +500,7 @@
         <%--var url = "${pageContext.request.contextPath}/pageChange/?currentExerciseID="+ obj[obj.selectedIndex].value;--%>
         // xhttp.open("GET",url, true);
         // xhttp.send();
-        console.log(json.workspacexml);
+        if (isDev) console.log(json.workspacexml);
         // Save the state of the previous exercise (before switching exercise)
         <%--postrequest("${pageContext.request.contextPath}/currentExercise",json);--%>
     }
@@ -535,10 +536,9 @@
         var url;
         var json;
         json = primaryEvent.toJson();
-        console.log(json);
+        if (isDev) console.log(json);
         var url;
 
-        document.getElementById("pythonArea").value = "PYTHON : \n "+Blockly.Python.workspaceToCode(workspace) + "\n \n \n JAVASCRIPT : \n " + Blockly.JavaScript.workspaceToCode(workspace);
 
         switch(primaryEvent.type){
             // ui event : category, click and select
@@ -551,7 +551,7 @@
             // create event : when a block is created
             case "create":
                 url = "${pageContext.request.contextPath}/createBlock";
-                console.log(url);
+                if (isDev) console.log(url);
                 json.xml = json.xml.split('type="')[1].split('"')[0];
                 break;
             // move event : when a block is moved
@@ -562,7 +562,7 @@
                     json.type = "combine";
                     json.newInputName = (json.newInputName || null);
                     url = "${pageContext.request.contextPath}/combineBlock";
-                    console.log(url);
+                    if (isDev) console.log(url);
                 }
                 break;
             // change event : when a block is changed
@@ -586,11 +586,11 @@
             case "var_rename":
                 url = "${pageContext.request.contextPath}/varEvent";
                 json.varName = json.newName;
-                console.log("var_rename");
+                if (isDev) console.log("var_rename");
                 break;
             // default event, for the event not used
             default:
-                console.log("ERROR : UNKNOW EVENT ", primaryEvent.type);
+                if (isDev) console.log("ERROR : UNKNOW EVENT ", primaryEvent.type);
                 return;
         }
 
@@ -598,9 +598,9 @@
         var e = document.getElementById("exerciselist");
         json.currentExerciseID = e.options[e.selectedIndex].value; //exerciselist work but i don't know why? need to redefine it?
         json.time= new Date().toISOString().slice(0, 19).replace('T',' ');
-        console.log("This is the JSON request: " + json);
+        if (isDev) console.log("This is the JSON request: " + json);
 
-        console.log(json,url);
+        if (isDev) console.log(json,url);
         postrequest(url,json);
     }
 
@@ -656,7 +656,7 @@
 
 
     var ledMatrix = getLedMatrix();
-    console.log(ledMatrix);
+    if (isDev) console.log(ledMatrix);
     function getLedMatrix(){
         var led =[];
         var temp;
@@ -678,7 +678,7 @@
         if (!led[0])
         {
             setTimeout(showNumber,SET_INTERVAL*5);
-            console.log(null);
+            if (isDev) console.log(null);
             return null;
         }
         if (led[0][0].length == 5)
@@ -702,8 +702,8 @@
     }
 
     function show(tab){ /// test if not number or if number is infinity
-        console.log("show");
-        console.log("show",tab);
+        if (isDev) console.log("show");
+        if (isDev) console.log("show",tab);
         for (var i=0;i<tab.length;i++){
             for (var j=0;j<tab.length;j++){
                 if (tab[i][j] == 1)
@@ -769,10 +769,10 @@
 
     function startSimulation(){
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log(code);
+        if (isDev) console.log(code);
         try{
             eval(code);
-            console.log("done");
+            if (isDev) console.log("done");
         } catch(e){
             alert(e);
         }

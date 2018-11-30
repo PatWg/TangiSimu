@@ -91,6 +91,7 @@
 
 
 <script>
+    var isDev = true;
     var workspace = Blockly.inject('blocklyDiv', {
         toolbox: document.getElementById('toolbox')
     });
@@ -104,7 +105,7 @@
 
     workspace.addChangeListener(mirrorEvent);
     var workspaceState = '${workspace}';
-    console.log(workspaceState)
+    if (isDev) console.log(workspaceState)
     loadXmlToWorkspace(workspaceState);
     var exerciseList = ${exercises};
     loadExerciseList(exerciseList);
@@ -123,7 +124,7 @@
     // Load the workspace from xml code
     function loadXmlToWorkspace(wholexml){
         <%--var test = new XMLSerializer().serializeToString(${workspace});--%>
-        <%--console.log(test);--%>
+        <%--if (isDev) console.log(test);--%>
         if (wholexml == null)
             return;
         blockEvent +=1;
@@ -142,16 +143,16 @@
         json.time =new Date().toISOString().slice(0, 19).replace('T',' ');
         json.action= "exerciseChangement";
         json.newExerciseID = obj[obj.selectedIndex].value;
-        console.log("CHANGE EXERCISE: " , json);
+        if (isDev) console.log("CHANGE EXERCISE: " , json);
         blockEvent+=1;
         workspace.clear();
-        console.log(exerciseList[0]);
+        if (isDev) console.log(exerciseList[0]);
         document.querySelector("#exerciseStatement").innerHTML = exerciseList[(obj[obj.selectedIndex].value)-1]["content"];
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 // Typical action to be performed when the document is ready:
-                console.log(xhttp.responseText);
+                if (isDev) console.log(xhttp.responseText);
                 loadXmlToWorkspace(xhttp.responseText);
             }
         };
@@ -180,7 +181,7 @@
             mousePosition.userID = document.getElementById("userId").innerHTML;
             var e = document.getElementById("exerciselist");
             mousePosition.currentExerciseID = e.options[e.selectedIndex].value;
-            //console.log(mousePosition);
+            //if (isDev) console.log(mousePosition);
             postrequest("${pageContext.request.contextPath}/mousePosition", mousePosition);
         }
         setTimeout(sendMousePos,100);
@@ -191,10 +192,8 @@
         var url;
         var json;
         json = primaryEvent.toJson();
-        console.log(json);
+        if (isDev) console.log(json);
         var url;
-
-        document.getElementById("pythonArea").value = "PYTHON : \n "+Blockly.Python.workspaceToCode(workspace) + "\n \n \n JAVASCRIPT : \n " + Blockly.JavaScript.workspaceToCode(workspace);
 
         switch(primaryEvent.type){
             // ui event : category, click and select
@@ -207,7 +206,7 @@
             // create event : when a block is created
             case "create":
                 url = "${pageContext.request.contextPath}/createBlock";
-                console.log(url);
+                if (isDev) console.log(url);
                 json.xml = json.xml.split('type="')[1].split('"')[0];
                 break;
             // move event : when a block is moved
@@ -218,7 +217,7 @@
                     json.type = "combine";
                     json.newInputName = (json.newInputName || null);
                     url = "${pageContext.request.contextPath}/combineBlock";
-                    console.log(url);
+                    if (isDev) console.log(url);
                 }
                 break;
             // change event : when a block is changed
@@ -242,11 +241,11 @@
             case "var_rename":
                 url = "${pageContext.request.contextPath}/varEvent";
                 json.varName = json.newName;
-                console.log("var_rename");
+                if (isDev) console.log("var_rename");
                 break;
             // default event, for the event not used
             default:
-                console.log("ERROR : UNKNOW EVENT ", primaryEvent.type);
+                if (isDev) console.log("ERROR : UNKNOW EVENT ", primaryEvent.type);
                 return;
         }
 
@@ -254,9 +253,9 @@
         var e = document.getElementById("exerciselist");
         json.currentExerciseID = e.options[e.selectedIndex].value; //exerciselist work but i don't know why? need to redefine it?
         json.time= new Date().toISOString().slice(0, 19).replace('T',' ');
-        console.log("This is the JSON request: " + json);
+        if (isDev) console.log("This is the JSON request: " + json);
 
-        console.log(json,url);
+        if (isDev) console.log(json,url);
         postrequest(url,json);
     }
 
@@ -279,7 +278,7 @@
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 // Typical action to be performed when the document is ready:
-                console.log(xhttp.responseText);
+                if (isDev) console.log(xhttp.responseText);
                 download(xhttp.responseText);
             }
         };
