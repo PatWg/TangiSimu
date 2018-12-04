@@ -394,7 +394,6 @@
 </div>
 
 <button onclick="runProgram()">Lancer le programme</button>
-<button onclick="stopSimulation()">Arréter le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
