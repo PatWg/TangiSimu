@@ -394,6 +394,7 @@
 </div>
 
 <button onclick="runProgram()">Lancer le programme</button>
+<button onclick="stopSimulation()">Arréter le programme</button>
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
@@ -1010,14 +1011,16 @@
         return array;
     }
 
+    function stopSimulation(){
+        led = [];
+        show(emptyLed);
+    }
+
     function startSimulation(){
         window.LoopTrap = 100000;
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >10000)) throw "Infinite loop.";\n';
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log(code);
-        led = [];
-        show(emptyLed);
-        if (isDev) console.log(code);
+        stopSimulation();
         try{
             eval(code);
         } catch(e){
