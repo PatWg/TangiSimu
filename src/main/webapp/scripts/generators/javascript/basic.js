@@ -6,7 +6,10 @@ goog.require('Blockly.JavaScript');
 
 
 Blockly.JavaScript['show_number'] = function(block) {
+
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    if (value_name == null) value_name = '';
+    var numeric_value = value_name.toString();
     // TODO: Assemble JavaScript into code variable.
     var code = 'addNumber(' + value_name + ');\n';
     return code;
@@ -64,8 +67,5 @@ Blockly.JavaScript['pause'] = function(block) {
 
 Blockly.JavaScript['show_icon'] = function(block){
 
-
-
-
-    return "";
+    return "addMatrix(icons." + block.getFieldValue("ICON").toLowerCase() + ");\n";
 };
