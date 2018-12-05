@@ -101,7 +101,7 @@ Blockly.Python['pause'] = function(block) {
 Blockly.Python['show_icon'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var dropdown_icon = block.getFieldValue('ICON');
-    var image_name = 'IMAGE.';
+    var image_name = 'Image.';
     image_name += dropdown_icon;
     var code = 'display.show(' + image_name + ')\n';
     return code;

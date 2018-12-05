@@ -441,7 +441,7 @@
             [1, 1, 1, 1, 1],
             [0, 1, 1, 1, 0],
             [0, 0, 1, 0, 0]],
-        smallheart: [
+        heart_small: [
             [0, 0, 0, 0, 0],
             [0, 1, 0, 1, 0],
             [0, 1, 1, 1, 0],
@@ -519,7 +519,7 @@
             [0, 1, 0, 1, 0],
             [1, 1, 1, 1, 1],
             [0, 0, 0, 0, 0]],
-        lefttriangle: [
+        triangle_left: [
             [1, 0, 0, 0, 0],
             [1, 1, 0, 0, 0],
             [1, 0, 1, 0, 0],
@@ -537,7 +537,7 @@
             [1, 0, 0, 0, 1],
             [0, 1, 0, 1, 0],
             [0, 0, 1, 0, 0]],
-        smalldiamond: [
+        diamond_small: [
             [0, 0, 0, 0, 0],
             [0, 0, 1, 0, 0],
             [0, 1, 0, 1, 0],
@@ -549,7 +549,7 @@
             [1, 0, 0, 0, 1],
             [1, 0, 0, 0, 1],
             [1, 1, 1, 1, 1]],
-        smallsquare: [
+        square_small: [
             [0, 0, 0, 0, 0],
             [0, 1, 1, 1, 0],
             [0, 1, 0, 1, 0],
@@ -651,13 +651,13 @@
             [1, 1, 1, 1, 1],
             [0, 1, 1, 1, 0],
             [0, 0, 1, 0, 0]],
-        quarternote: [
+        music_crotchet: [
             [0, 0, 1, 0, 0],
             [0, 0, 1, 0, 0],
             [0, 0, 1, 0, 0],
             [1, 1, 1, 0, 0],
             [1, 1, 1, 0, 0]],
-        eigthnote: [
+        music_quaver: [
             [0, 0, 1, 0, 0],
             [0, 0, 1, 1, 0],
             [0, 0, 1, 0, 1],
@@ -990,10 +990,9 @@
     function intToArray(val){
         var temp;
         var array =[[],[],[],[],[]];
-        console.log(val);
+        // return an empty array if the val is not defined, can be changed to something else if needed
         if (val == null)
             return emptyLed;
-        console.log(emptyLed);
         var str = val.toString();
         for (var i=0;i<str.length;i++){
             if (str.charAt(i) == "-"){
@@ -1009,7 +1008,6 @@
                 array[j] = array[j].concat(temp[j]);
             }
         }
-        console.log(array);
         return array;
     }
 
@@ -1023,6 +1021,7 @@
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >10000)) throw "Infinite loop.";\n';
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log(code);
+        console.log(Blockly.Python.workspaceToCode(workspace));
         stopSimulation();
         try {
             eval(code);
