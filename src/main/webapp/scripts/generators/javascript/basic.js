@@ -7,9 +7,8 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['show_number'] = function(block) {
 
-    var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    if (value_name == null) value_name = '';
-    var numeric_value = value_name.toString();
+
+    var value_name = block.getFieldValue('VALUE');
     // TODO: Assemble JavaScript into code variable.
     var code = 'addNumber(' + value_name + ');\n';
     return code;

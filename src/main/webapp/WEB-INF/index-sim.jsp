@@ -429,7 +429,7 @@
 
 
 <script>
-    var isDev = true;
+    var isDev = false;
     var workspace = Blockly.inject('blocklyDiv', {
         toolbox: document.getElementById('toolbox')
     });
@@ -932,7 +932,6 @@
         var temp = [];
         for (var i=0;i<5;i++)
         {
-            console.log(led[0][i]);
             temp.push(led[0][i].slice(0,5));
             led[0][i].shift();
         }
@@ -962,8 +961,6 @@
             }
 
         }
-
-
     }
 
     function addNumber(i){
@@ -989,9 +986,14 @@
     var dotToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0]];
     var emptyLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
 
+
     function intToArray(val){
         var temp;
         var array =[[],[],[],[],[]];
+        console.log(val);
+        if (val == null)
+            return emptyLed;
+        console.log(emptyLed);
         var str = val.toString();
         for (var i=0;i<str.length;i++){
             if (str.charAt(i) == "-"){
@@ -1007,6 +1009,7 @@
                 array[j] = array[j].concat(temp[j]);
             }
         }
+        console.log(array);
         return array;
     }
 
@@ -1019,6 +1022,7 @@
         window.LoopTrap = 100000;
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >10000)) throw "Infinite loop.";\n';
         var code = Blockly.JavaScript.workspaceToCode(workspace);
+        console.log(code);
         stopSimulation();
         try {
             eval(code);
