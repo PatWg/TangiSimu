@@ -73,10 +73,12 @@ Blockly.Python['show_leds'] = function(block) {
         for (var j = 0; j < 5; j++) {
             if (leds[j][i] == true) {
                 code += 'display.set_pixel(' + j + ' ,' + i + ', 9)\n';
+            } else {
+                code += 'display.set_pixel(' + j + ' ,' + i + ', 0)\n';
             }
         }
     }
-    return code;
+    return code + addWait();
 };
 
 
