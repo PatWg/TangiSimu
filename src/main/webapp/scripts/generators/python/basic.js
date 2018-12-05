@@ -8,6 +8,10 @@ goog.require('Blockly.Python');
 
 Blockly.Python.addReservedWords('microbit, display, show, sleep, set_pixel');
 
+function addWait(){
+    return 'sleep(500)\n';
+}
+
 Blockly.Python['show_number'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
@@ -104,6 +108,6 @@ Blockly.Python['show_icon'] = function(block) {
     var image_name = 'Image.';
     image_name += dropdown_icon;
     var code = 'display.show(' + image_name + ')\n';
-    return code;
+    return code+addWait();
 };
 
