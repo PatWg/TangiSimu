@@ -15,12 +15,24 @@ function addWait(){
 Blockly.Python['show_number'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
-    if (value_name == null) value_name = '';
-    var numeric_value = value_name.toString();
-    if (numeric_value > 9) {
-        return 'display.scroll(\'' + numeric_value + '\')\n';
+    var code = '';
+    if (Blockly.isNumber(value_name)) {
+        code += (value_name > 9) ? 'display.scroll(\'' + value_name + '\')\n' : 'display.show(\'' + value_name + '\')\n';
+    } else {
+        code += 'display.show(str(' + value_name + ')) if len(str(' + value_name + ')) < 2 else display.scroll(str(' + value_name + '))\n';
     }
-    return 'display.show(\'' + numeric_value + '\')\n';
+    return code + addWait();
+    // if (value_name == null) value_name = '';
+    // var numeric_value = value_name.toString();
+    // var code;
+    // if (Blockly.isNumber(numeric_value)) {
+    //     if (numeric_value > 9) {
+    //         code += 'display.scroll(\'' + numeric_value + '\')\n';
+    //     }
+    //     code += 'display.show(\'' + numeric_value + '\')\n';
+    // } else {
+    //     code += 'display.show(str(' + numeric_value +
+    // }
 };
 
 // Blockly.Python['show_number'] = function(block) {
