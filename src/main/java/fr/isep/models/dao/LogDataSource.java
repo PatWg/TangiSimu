@@ -13,6 +13,11 @@ public class LogDataSource implements LogDao {
     private static final int SELECT_ERROR = 0;
     private Connection connection;
 
+    private static final String INSERT_MOUSE_LOG = "INSERT INTO mousepos (userid, exerciseid, xposition, yposition, mptime) VALUES (?, ?, ?, ?, ?)";
+    private PreparedStatement mouseLogStatement = null;
+    private static final int MAX_BATCH_SIZE = 1000;
+    private int batchSize = 0;
+
     public LogDataSource() {
         connection = DatabaseConnection.getInstance().getConnection();
     }
@@ -205,16 +210,23 @@ public class LogDataSource implements LogDao {
     }
 
     private void addMousePositionLog(MousePositionLog log) throws SQLException {
-        String insertStatement = "INSERT INTO mousepos (userid, exerciseid, xposition, yposition, mptime) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(insertStatement);
+//        String insertStatement = "INSERT INTO mousepos (userid, exerciseid, xposition, yposition, mptime) VALUES (?, ?, ?, ?, ?)";
+        if (mouseLogStatement == null) mouseLogStatement = connection.prepareStatement(INSERT_MOUSE_LOG);
+//        PreparedStatement statement = connection.prepareStatement(insertStatement);
         int userId = Integer.parseInt(log.getUserID());
         int exerciseId = getExerciseId(log);
-        statement.setInt(1, userId);
-        statement.setInt(2, exerciseId);
-        statement.setString(3, log.getX());
-        statement.setString(4, log.getY());
-        statement.setString(5, log.getTime());
-        statement.executeUpdate();
+        mouseLogStatement.setInt(1, userId);
+        mouseLogStatement.setInt(2, exerciseId);
+        mouseLogStatement.setString(3, log.getX());
+        mouseLogStatement.setString(4, log.getY());
+        mouseLogStatement.setString(5, log.getTime());
+        mouseLogStatement.addBatch();
+        batchSize++;
+        if (batchSize == MAX_BATCH_SIZE) {
+            mouseLogStatement.executeBatch();
+            batchSize = 0;
+        }
+//        statement.executeUpdate();
     }
 
     private void addVariableLog(int eventId, EventLog eventLog) throws SQLException {
