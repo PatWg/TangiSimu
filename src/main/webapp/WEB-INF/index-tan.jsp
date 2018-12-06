@@ -60,7 +60,6 @@
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
         <block type="show_leds"></block>
-        <block type="pause"></block>
         <block type="show_icon"></block>
     </category>
     <category name="Math" colour="#5C68A6">

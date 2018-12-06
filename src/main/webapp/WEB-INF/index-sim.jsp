@@ -398,7 +398,6 @@
     <category name="Affichage" colour="#6d5ba5">
         <block type="show_number"></block>
         <block type="show_leds"></block>
-        <block type="pause"></block>
         <block type="show_icon"></block>
     </category>
     <category name="Math" colour="#5C68A6">
@@ -776,7 +775,6 @@
         var url;
         var json;
         json = primaryEvent.toJson();
-        if (isDev) console.log(json);
         var url;
 
 
@@ -791,7 +789,6 @@
             // create event : when a block is created
             case "create":
                 url = "${pageContext.request.contextPath}/createBlock";
-                if (isDev) console.log(url);
                 json.xml = json.xml.split('type="')[1].split('"')[0];
                 break;
             // move event : when a block is moved
@@ -802,7 +799,6 @@
                     json.type = "combine";
                     json.newInputName = (json.newInputName || null);
                     url = "${pageContext.request.contextPath}/combineBlock";
-                    if (isDev) console.log(url);
                 }
                 break;
             // change event : when a block is changed
@@ -826,11 +822,9 @@
             case "var_rename":
                 url = "${pageContext.request.contextPath}/varEvent";
                 json.varName = json.newName;
-                if (isDev) console.log("var_rename");
                 break;
             // default event, for the event not used
             default:
-                if (isDev) console.log("ERROR : UNKNOW EVENT ", primaryEvent.type);
                 return;
         }
 
@@ -838,9 +832,6 @@
         var e = document.getElementById("exerciselist");
         json.currentExerciseID = e.options[e.selectedIndex].value; //exerciselist work but i don't know why? need to redefine it?
         json.time= new Date().toISOString().slice(0, 19).replace('T',' ');
-        if (isDev) console.log("This is the JSON request: " + json);
-
-        if (isDev) console.log(json,url);
         postrequest(url,json);
     }
 
@@ -896,7 +887,6 @@
 
 
     var ledMatrix = getLedMatrix();
-    if (isDev) console.log(ledMatrix);
     function getLedMatrix(){
         var led =[];
         var temp;
@@ -911,20 +901,19 @@
     }
 
     // ALL the following code is for the simulation - May not be used
-    var SET_INTERVAL = 200;
+    var SET_INTERVAL = 500;
+    var SCROLL_INTERVAL =150;
     var led = [];
     showNumber();
     function showNumber(){
         if (!led[0])
         {
-            setTimeout(showNumber,SET_INTERVAL*5);
-            if (isDev) console.log(null);
+            setTimeout(showNumber,SET_INTERVAL);
             return null;
         }
         if ((typeof led[0]) == (typeof 3))
         {
             var temp = led[0];
-            console.log("here",temp);
             led.shift();
             show(emptyLed);
             setTimeout(showNumber,temp);
@@ -936,7 +925,7 @@
             var temp = led[0];
             led.shift();
             show(temp);
-            setTimeout(showNumber,SET_INTERVAL*5);
+            setTimeout(showNumber,SET_INTERVAL);
             return temp;
         }
         var temp = [];
@@ -946,15 +935,12 @@
             led[0][i].shift();
         }
 
-        //console.log(temp);
         show(temp);
-        setTimeout(showNumber,SET_INTERVAL);
+        setTimeout(showNumber,SCROLL_INTERVAL);
         return temp;
     }
 
     function show(tab){ /// test if not number or if number is infinity
-        if (isDev) console.log("show");
-        if (isDev) console.log("show",tab);
         for (var i=0;i<tab.length;i++){
             for (var j=0;j<tab.length;j++){
                 if (tab[i][j] == 1)
@@ -975,13 +961,13 @@
 
     function addNumber(i){
         if (led.length != 0)
-            led.push(300);
+            led.push(200);
         led.push(intToArray(i));
     }
 
     function addMatrix(arr){
         if (led.length != 0)
-            led.push(300);
+            led.push(200);
         led.push(arr);
     }
 
@@ -997,7 +983,7 @@
         [[0,1,1,1,0],[1,0,0,0,1],[0,1,1,1,0],[0,0,1,0,0],[0,1,0,0,0]]]; //9
 
     var negativeToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,1,1,1,0],[0,0,0,0,0],[0,0,0,0,0]];
-    var dotToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0]];
+    var dotToLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,1,0,0,0],[0,0,0,0,0]];
     var emptyLed = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
 
 
@@ -1005,12 +991,23 @@
         var temp;
         var array =[[],[],[],[],[]];
         // return an empty array if the val is not defined, can be changed to something else if needed
-        console.log(val);
         if (val == null)
             return emptyLed;
-        console.log("2",val);
+        var k=false;
         var str = val.toString();
+        if (str.length >1){
+            for (var j=0;j<5;j++){
+                array[j] = array[j].concat(emptyLed[j]);
+            }
+        }
         for (var i=0;i<str.length;i++){
+            if (k){
+                for (var j=0;j<5;j++){
+                    array[j] = array[j].concat(['0']);
+                }
+            }
+            if (!k)
+                k = true;
             if (str.charAt(i) == "-"){
                 temp = negativeToLed;
             }
@@ -1024,6 +1021,11 @@
                 array[j] = array[j].concat(temp[j]);
             }
         }
+        if (str.length >1){
+            for (var j=0;j<5;j++){
+                array[j] = array[j].concat(emptyLed[j]);
+            }
+        }
         return array;
     }
 
@@ -1033,10 +1035,9 @@
     }
 
     function startSimulation() {
-        window.LoopTrap = 100000;
-        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >10000)) throw "Infinite loop.";\n';
+        window.LoopTrap = 50000;
+        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >5000)) throw "Infinite loop.";\n';
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log(code);
         stopSimulation();
         try {
             eval(code);

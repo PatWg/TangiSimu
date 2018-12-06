@@ -12,16 +12,16 @@ function addWait(){
     return 'sleep(500)\n';
 }
 
+function addBlank(){
+    return 'display.clear()\nsleep(200)\n';
+}
+
 Blockly.Python['show_number'] = function(block) {
     Blockly.Python.definitions_['import microbit'] = 'from microbit import *';
     var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
     var code = '';
-    if (Blockly.isNumber(value_name)) {
-        code += (value_name > 9) ? 'display.scroll(\'' + value_name + '\')\n' : 'display.show(\'' + value_name + '\')\n';
-    } else {
-        code += 'display.show(str(' + value_name + ')) if len(str(' + value_name + ')) < 2 else display.scroll(str(' + value_name + '))\n';
-    }
-    return code + addWait();
+    code += 'display.show(str(' + value_name + ')) if len(str(' + value_name + ')) < 2 else display.scroll(str(' + value_name + '))\n';
+    return addBlank() + code + addWait();
     // if (value_name == null) value_name = '';
     // var numeric_value = value_name.toString();
     // var code;
@@ -90,7 +90,7 @@ Blockly.Python['show_leds'] = function(block) {
             }
         }
     }
-    return code + addWait();
+    return addBlank() + code + addWait();
 };
 
 
@@ -122,6 +122,6 @@ Blockly.Python['show_icon'] = function(block) {
     var image_name = 'Image.';
     image_name += dropdown_icon;
     var code = 'display.show(' + image_name + ')\n';
-    return code+addWait();
+    return addBlank() + code + addWait();
 };
 
