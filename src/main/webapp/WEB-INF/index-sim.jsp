@@ -991,8 +991,10 @@
         var temp;
         var array =[[],[],[],[],[]];
         // return an empty array if the val is not defined, can be changed to something else if needed
+        console.log(val);
         if (val == null)
             return emptyLed;
+        console.log("2",val);
         var str = val.toString();
         for (var i=0;i<str.length;i++){
             if (str.charAt(i) == "-"){
@@ -1021,7 +1023,6 @@
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if((--window.LoopTrap == 0) || (led.length >10000)) throw "Infinite loop.";\n';
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log(code);
-        console.log(Blockly.Python.workspaceToCode(workspace));
         stopSimulation();
         try {
             eval(code);
