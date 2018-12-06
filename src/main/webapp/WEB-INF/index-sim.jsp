@@ -921,8 +921,18 @@
             if (isDev) console.log(null);
             return null;
         }
+        if ((typeof led[0]) == (typeof 3))
+        {
+            var temp = led[0];
+            console.log("here",temp);
+            led.shift();
+            show(emptyLed);
+            setTimeout(showNumber,temp);
+            return temp;
+        }
         if (led[0][0].length == 5)
         {
+
             var temp = led[0];
             led.shift();
             show(temp);
@@ -964,10 +974,14 @@
     }
 
     function addNumber(i){
+        if (led.length != 0)
+            led.push(300);
         led.push(intToArray(i));
     }
 
     function addMatrix(arr){
+        if (led.length != 0)
+            led.push(300);
         led.push(arr);
     }
 

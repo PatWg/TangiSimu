@@ -85,12 +85,18 @@ public class ExerciseServlet extends HttpServlet {
 
         String[] run = runtime.toString().split("\n");
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < run.length - 2; i++) {
+        for (int i = 0; i < run.length - 5; i++) {
             result.append(run[i])
                     .append("\n");
         }
         result.append(hexScript);
-        result.append(run[run.length - 2])
+        result.append(run[run.length - 5])
+                .append("\n")
+                .append(run[run.length - 4])
+                .append("\n")
+                .append(run[run.length - 3])
+                .append("\n")
+                .append(run[run.length - 2])
                 .append("\n")
                 .append(run[run.length - 1]);
         return result.toString();
